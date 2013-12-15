@@ -38,7 +38,8 @@ public class HasAttributesTest {
 	public void matches() throws IOException {
         assertThat(TestUtils
         		.createDomNode("<span attr1='1' attr2=\"2\">text</span>"), 
-        		hasAttributes("attr1",first,"attr2",second));
+        		hasAttributes(new Attribute("attr1", first), new Attribute("attr2",second)));
+        
 	}
 	
 	@Test
@@ -48,19 +49,17 @@ public class HasAttributesTest {
         		hasAttributes());
 	}
 	
-	
-	
 	@Test
 	public void description() throws IOException {
-		Matcher<DomNode> test = hasAttributes("attr1",first,"attr2",second);
+		Matcher<DomNode> test = hasAttributes(new Attribute("attr1", first), new Attribute("attr2",second));
 		Description description = new StringDescription();
 		test.describeTo(description);
-		assertThat(description.toString(), equalTo("DomNode with attributes attr1='1', attr2='2'"));
+		assertThat(description.toString(), equalTo("DomNode with attributes: <attr1='1'>,<attr2='2'>"));
 	}
 	
 	@Test
 	public void failsIfElementHasExtraAttributes() throws IOException {
-		Matcher<DomNode> test = hasAttributes("attr1",first,"attr2",second);
+		Matcher<DomNode> test = hasAttributes(new Attribute("attr1", first), new Attribute("attr2",second));
 		assertThat(test
 				.matches(TestUtils.createDomNode("<span attr1='1' attr3='3' attr2=\"2\">text</span>")), 
 				equalTo(false));
@@ -69,7 +68,7 @@ public class HasAttributesTest {
 	
 	@Test
 	public void failsIfElementHasLessAttributes() throws IOException {
-		Matcher<DomNode> test = hasAttributes("attr1",first,"attr2",second);
+		Matcher<DomNode> test = hasAttributes(new Attribute("attr1", first), new Attribute("attr2",second));
 		assertThat(test
 				.matches(TestUtils.createDomNode("<span attr1='1'>text</span>")), 
 				equalTo(false));
@@ -77,7 +76,7 @@ public class HasAttributesTest {
 	
 	@Test
 	public void failsIfAttributeValuesNoMatch() throws IOException {
-		Matcher<DomNode> test = hasAttributes("attr1",first,"attr2",second);
+		Matcher<DomNode> test = hasAttributes(new Attribute("attr1", first), new Attribute("attr2",second));
 		assertThat(test
 				.matches(TestUtils.createDomNode("<span attr1='1' attr2='3'>text</span>")), 
 				equalTo(false));
@@ -86,7 +85,7 @@ public class HasAttributesTest {
 	
 	@Test
 	public void failsIfElementHasNoAttributes() throws IOException {
-		Matcher<DomNode> test = hasAttributes("attr1",first,"attr2",second);
+		Matcher<DomNode> test = hasAttributes(new Attribute("attr1", first), new Attribute("attr2",second));
 		assertThat(test
 				.matches(TestUtils.createDomNode("<span>text</span>")), 
 				equalTo(false));

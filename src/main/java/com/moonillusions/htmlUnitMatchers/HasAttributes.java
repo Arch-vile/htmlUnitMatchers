@@ -2,6 +2,7 @@ package com.moonillusions.htmlUnitMatchers;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.hamcrest.Description;
@@ -28,7 +29,7 @@ public class HasAttributes extends TypeSafeMatcher<DomNode>  {
 	}
 
 	public void describeTo(Description description) {
-		description.appendText("DomNode with attributes " + Joiner.on(", ").join(attributes));
+		description.appendText("DomNode with attributes: ").appendValueList("", ",", "" , attributes);
 	}
 
 
@@ -49,16 +50,13 @@ public class HasAttributes extends TypeSafeMatcher<DomNode>  {
 	}
 	
 	@Factory
-	public static <T> Matcher<DomNode> hasAttributes(Object...attr) {
-	    return new HasAttributes(extractAttributes(attr));
+	public static <T> Matcher<DomNode> hasAttributes(Attribute...attr) {
+	    return new HasAttributes(Arrays.asList(attr));
 	}
-
-	private static List<Attribute> extractAttributes(Object[] attr) {
-		List<Attribute> list = new ArrayList<Attribute>();
-		for(int i = 0; i< attr.length; i+=2){
-			list.add(new Attribute(attr[i].toString(),attr[i+1]));
-		}
-		return list;
+	
+	@Factory
+	public static <T> Matcher<DomNode> hasAttributes(List<Attribute> attrs) {
+	    return new HasAttributes(attrs);
 	}
 
 }
