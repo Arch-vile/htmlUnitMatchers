@@ -42,6 +42,15 @@ public class HasAttributesTest {
 	}
 	
 	@Test
+	public void matchesWithoutAttributes() throws IOException {
+        assertThat(TestUtils
+        		.createDomNode("<span>text</span>"), 
+        		hasAttributes());
+	}
+	
+	
+	
+	@Test
 	public void description() throws IOException {
 		Matcher<DomNode> test = hasAttributes("attr1",first,"attr2",second);
 		Description description = new StringDescription();
@@ -83,5 +92,13 @@ public class HasAttributesTest {
 				equalTo(false));
 	}
 	
+	
+	@Test
+	public void failsIfElementHasAttributes() throws IOException {
+		Matcher<DomNode> test = hasAttributes();
+		assertThat(test
+				.matches(TestUtils.createDomNode("<span attr1='1'>text</span>")), 
+				equalTo(false));
+	}
 	
 }
