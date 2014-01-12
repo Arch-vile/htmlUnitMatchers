@@ -1,44 +1,33 @@
 package com.moonillusions.htmlUnitMatchers;
 
 
-import static com.moonillusions.htmlUnitMatchers.HasAttributes.hasAttributes;
-import static org.hamcrest.MatcherAssert.assertThat;
-
 import java.io.IOException;
 import java.net.MalformedURLException;
 
-import org.hamcrest.Description;
 import org.hamcrest.Matcher;
-import org.hamcrest.StringDescription;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.DomElement;
 import com.gargoylesoftware.htmlunit.html.DomNode;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlElement;
 
+import static com.moonillusions.htmlUnitMatchers.HasAttributes.hasAttributes;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 
 public class HasAttributesTest {
-
-	
-	private Integer first;
-	private Integer second;
 	
 	@Before
 	public void setUp() throws Exception {
-		first = 1;
-		second = 2;
 	}
 
 	@Test
 	public void matches() throws IOException {
         assertThat(TestUtils
         		.createDomNode("<span attr1='1' attr2=\"2\">text</span>"), 
-        		hasAttributes(new Attribute("attr1", first), new Attribute("attr2",second)));
+        		hasAttributes(new Attribute("attr1", 1), new Attribute("attr2",2)));
         
 	}
 	
@@ -50,33 +39,64 @@ public class HasAttributesTest {
 	}
 	
 	@Test
-	public void description() throws IOException {
-		Matcher<DomNode> test = hasAttributes(new Attribute("attr1", first), new Attribute("attr2",second));
-		Description description = new StringDescription();
-		test.describeTo(description);
-		assertThat(description.toString(), equalTo("DomNode with attributes: <attr1='1'>,<attr2='2'>"));
+	public void matchesNoValueAttributes() throws IOException {
+        assertThat(TestUtils
+        		.createDomNode("<span novalue>text</span>"), 
+        		hasAttributes(new Attribute("novalue", "")));
+	}
+	
+	@Test
+	public void matchesDuplicateAttributes() throws IOException {
+        assertThat(TestUtils
+        		.createDomNode("<span attr1='1' attr1='1'>text</span>"), 
+        		hasAttributes(new Attribute("attr1", "1")));
+	}
+	
+	
+	
+	@Test
+	public void failsIfWrongOrder() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
+		HtmlElement span = TestUtils.createDomNode("<span attr1='1' attr2=\"2\">text</span>");
+		Matcher<DomNode> test = hasAttributes(new Attribute("attr2", 2), new Attribute("attr1",1));
+		
+		assertThat(test.matches(span), equalTo(false));
+		TestUtils.assertDescribeMismatch(test, span, "item 0: was <" +
+				new Attribute("attr1", 1) + 
+				"> in " + 
+				StringUtils.print(span));
 	}
 	
 	@Test
 	public void failsIfElementHasExtraAttributes() throws IOException {
-		Matcher<DomNode> test = hasAttributes(new Attribute("attr1", first), new Attribute("attr2",second));
-		assertThat(test
-				.matches(TestUtils.createDomNode("<span attr1='1' attr3='3' attr2=\"2\">text</span>")), 
-				equalTo(false));
+		HtmlElement span = TestUtils.createDomNode("<span attr1='1' attr2=\"2\" attr3='3'>text</span>");
+		Matcher<DomNode> test = hasAttributes(new Attribute("attr1", 1), new Attribute("attr2",2));
+		
+		assertThat(test.matches(span), equalTo(false));
+		TestUtils.assertDescribeTo(test, "DomNode with attributes: <iterable containing [<attr1='1'>, <attr2='2'>]>");
+		TestUtils.assertDescribeMismatch(test, span, "Not matched: <" +
+				new Attribute("attr3", 3) + 
+				"> in " + 
+				StringUtils.print(span));
+		
 	}
 	
 	
 	@Test
 	public void failsIfElementHasLessAttributes() throws IOException {
-		Matcher<DomNode> test = hasAttributes(new Attribute("attr1", first), new Attribute("attr2",second));
-		assertThat(test
-				.matches(TestUtils.createDomNode("<span attr1='1'>text</span>")), 
-				equalTo(false));
+		Matcher<DomNode> test = hasAttributes(new Attribute("attr1", 1), new Attribute("attr2",2));
+		HtmlElement span = TestUtils.createDomNode("<span attr1='1'>text</span>");
+		
+		assertThat(test.matches(span), equalTo(false));
+		TestUtils.assertDescribeTo(test, "DomNode with attributes: <iterable containing [<attr1='1'>, <attr2='2'>]>");
+		TestUtils.assertDescribeMismatch(test, span, "No item matched: <" +
+				new Attribute("attr2", 2) + 
+				"> in " + 
+				StringUtils.print(span));
 	}
 	
 	@Test
 	public void failsIfAttributeValuesNoMatch() throws IOException {
-		Matcher<DomNode> test = hasAttributes(new Attribute("attr1", first), new Attribute("attr2",second));
+		Matcher<DomNode> test = hasAttributes(new Attribute("attr1", 1), new Attribute("attr2",2));
 		assertThat(test
 				.matches(TestUtils.createDomNode("<span attr1='1' attr2='3'>text</span>")), 
 				equalTo(false));
@@ -85,19 +105,31 @@ public class HasAttributesTest {
 	
 	@Test
 	public void failsIfElementHasNoAttributes() throws IOException {
-		Matcher<DomNode> test = hasAttributes(new Attribute("attr1", first), new Attribute("attr2",second));
-		assertThat(test
-				.matches(TestUtils.createDomNode("<span>text</span>")), 
-				equalTo(false));
+		Matcher<DomNode> test = hasAttributes(new Attribute("attr1", 1), new Attribute("attr2",2));
+		HtmlElement span = TestUtils.createDomNode("<span>text</span>");
+		assertThat(test.matches(span),equalTo(false));
+		TestUtils.assertDescribeTo(test, "DomNode with attributes: <iterable containing [<attr1='1'>, <attr2='2'>]>");
+		TestUtils.assertDescribeMismatch(test, span, "No item matched: <" +
+				new Attribute("attr1", 1) + 
+				"> in " + 
+				StringUtils.print(span));
 	}
 	
 	
 	@Test
 	public void failsIfElementHasAttributes() throws IOException {
 		Matcher<DomNode> test = hasAttributes();
-		assertThat(test
-				.matches(TestUtils.createDomNode("<span attr1='1'>text</span>")), 
-				equalTo(false));
+		HtmlElement span = TestUtils.createDomNode("<span attr1='1'>text</span>");
+		
+		assertThat(test.matches(span), equalTo(false));
+		TestUtils.assertDescribeTo(test, "DomNode with attributes: <an empty collection>");
+		TestUtils.assertDescribeMismatch(test, span, "<[" +
+				new Attribute("attr1", 1) + 
+				"]> found in " + 
+				StringUtils.print(span));
+		
 	}
+	
+	
 	
 }
