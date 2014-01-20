@@ -25,6 +25,7 @@ public class HasOptions extends BaseElementMatcher<HtmlSelect>  {
 	
 	public HasOptions(List<Option> options) {
 		this.options = options;
+		this.tester = new HasOptionsTester(options);
 	}
 
 	public void describeTo(Description arg0) {
@@ -35,7 +36,11 @@ public class HasOptions extends BaseElementMatcher<HtmlSelect>  {
 	@Override
 	protected boolean matchesSafely(HtmlSelect select) {
 
-		List<Option> actual = new ArrayList<Option>();
+		return this.tester.matches(select);
+		
+		
+		
+		/*List<Option> actual = new ArrayList<Option>();
 		for(HtmlOption option : select.getOptions()) {
 			actual.add(new Option(option));
 		}
@@ -55,7 +60,7 @@ public class HasOptions extends BaseElementMatcher<HtmlSelect>  {
 		if (!contains(matchers).matches(actual)) {
 			setFailingMatcher(contains);
 			return false;
-		}
+		}*/
 		
 		
 		//List<HtmlOption> actualOptions = select.getOptions();
@@ -85,7 +90,6 @@ public class HasOptions extends BaseElementMatcher<HtmlSelect>  {
 //			
 //		}
 		
-		return true;
 	}
 	
 	

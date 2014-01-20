@@ -13,6 +13,8 @@ public abstract class BaseElementMatcher<T extends DomNode> extends TypeSafeMatc
 	private Matcher failingMatcher;
 	private Object failingItem;
 	
+	BaseTester tester;
+	
 	
 	public Object getFailingItem() {
 		return failingItem;
@@ -45,8 +47,9 @@ public abstract class BaseElementMatcher<T extends DomNode> extends TypeSafeMatc
 	
 	@Override
 	protected void describeMismatchSafely(T item, Description mismatchDescription) {
-		failingMatcher.describeMismatch(getFailingItem(), mismatchDescription);
-		mismatchDescription.appendText(mismatchError.isEmpty() ? "" : " " + mismatchError).appendText(" in ").appendText(StringUtils.print(item));
+		//failingMatcher.describeMismatch(getFailingItem(), mismatchDescription);
+		//mismatchDescription.appendText(mismatchError.isEmpty() ? "" : " " + mismatchError).appendText(" in ").appendText(StringUtils.print(item));
+		mismatchDescription.appendText(tester.getMismatch());
 	}
 	
 	protected boolean applyMatcher(Object actual, Matcher matcher) {

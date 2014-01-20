@@ -63,15 +63,21 @@ public class HasOptionsTest {
 	public void failsIfOptionAttributeValuesDiffer() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
 		Matcher<HtmlSelect> test = hasOptions(
 				new Option("one").withAttr("value",1),
-				new Option("two").withAttr("value","mismatch"));
+				new Option("two").withAttr("value",2));
 		HtmlSelect select = (HtmlSelect)TestUtils.createDomNode("<select>"
 				+ "<option value=\"1\">one</option>"
-				+ "<option value=\"2\">two</option>"
+				+ "<option value=\"mismatch\">two</option>"
 				+ "</select>");
 		
+		
 		assertThat(test.matches(select), equalTo(false));
-		TestUtils.assertDescribeTo(test, "HtmlSelect with options: <<option value='1'>one</option>>,<<option value='mismatch'>two</option>>");
-		TestUtils.assertDescribeMismatch(test, select, "");
+		TestUtils.assertDescribeTo(test, "HtmlSelect with options: <<option value='1'>one</option>>,<<option value='2'>two</option>>");
+		TestUtils.assertDescribeMismatch(test, select, 
+				"On HtmlSelect[<select><option value=1 selected=selected>one</option><option value=mismatch>two</option></select>]"
+				+ "\n\tOn Option[<option value='mismatch'>two</option>]"
+				+ "\n\t\tOn Attribute['value='mismatch'']"
+				+ "\n\t\t\tthe value did not match");
+		
 	}
 	
 	@Test
