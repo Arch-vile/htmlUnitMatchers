@@ -69,7 +69,7 @@ public class HasOptionsTest {
 				+ "<option value=\"mismatch\">two</option>"
 				+ "</select>");
 		
-		
+		assertThat(select, test);
 		assertThat(test.matches(select), equalTo(false));
 		TestUtils.assertDescribeTo(test, "HtmlSelect with options: <<option value='1'>one</option>>,<<option value='2'>two</option>>");
 		TestUtils.assertDescribeMismatch(test, select, 

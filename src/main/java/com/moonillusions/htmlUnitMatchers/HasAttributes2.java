@@ -24,15 +24,25 @@ public class HasAttributes2 extends ChainableMatcher<DomNode> {
 
 	
 	public HasAttributes2(Attribute ... attributes) {
-		List<HasAttribute> matchers = new ArrayList<HasAttribute>();
+		for(Attribute attribute : attributes) {
+			addMatcher(new HasAttribute(attribute));
+		}
+	}
+
+	public HasAttributes2(List<Attribute> attributes) {
 		for(Attribute attribute : attributes) {
 			addMatcher(new HasAttribute(attribute));
 		}
 	}
 
 	@Factory
-	public static Matcher<DomNode> hasAttributes(Attribute...attr) {
+	public static ChainableMatcher<DomNode> hasAttributes(Attribute...attr) {
 	    return new HasAttributes2(attr);
+	}
+	
+	@Factory
+	public static ChainableMatcher<DomNode> hasAttributes(List<Attribute> attributes) {
+	    return new HasAttributes2(attributes);
 	}
 
 	@Override
@@ -46,9 +56,14 @@ public class HasAttributes2 extends ChainableMatcher<DomNode> {
 	}
 
 	@Override
-	protected boolean match(DomNode arg0) {
-		// TODO Auto-generated method stub
+	protected List<DomNode> matchAgainst(DomNode item) {
+		return Arrays.asList(item);
+	}
+
+	@Override
+	protected boolean match(List arg0) {
 		return false;
 	}
+
 
 }

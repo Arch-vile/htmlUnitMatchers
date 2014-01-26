@@ -6,10 +6,14 @@ import java.util.List;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 
+import com.gargoylesoftware.htmlunit.html.DomNode;
+
 public abstract class ChainableMatcher<T> extends TypeSafeMatcher<T> {
 
 	private boolean failed = false;
 	private List<ChainableMatcher> matchers = new ArrayList<ChainableMatcher>();
+	
+	private Object failedItem;
 	
 	protected void addMatcher(ChainableMatcher matcher){
 		this.matchers.add(matcher);
@@ -20,27 +24,45 @@ public abstract class ChainableMatcher<T> extends TypeSafeMatcher<T> {
 	}
 	
 	@Override
-	protected final boolean matchesSafely(T arg0) {
-		return matchesInner(arg0);
+	protected final boolean matchesSafely(T item) {
+		return matchesInner(item);
 	}
 	
 	
-	protected final boolean matchesInner(T arg0) {
+	protected final boolean matchesInner(T item) {
 		
 		if(this.matchers.isEmpty()) {
-			this.setFailed(!this.match(arg0));
+			this.setFailed(!this.match(this.matchAgainst(item)));
 		} else {
-		
-			for(ChainableMatcher<T> matcher : this.matchers) {
-				boolean match = matcher.matchesInner(arg0);
-				if(!match) {
+			
+//			boolean matched = true;
+			
+//			for(Object value : this.matchAgainst(item)) {
+//				for(ChainableMatcher matcher : this.matchers) {
+//					if(!matcher.matchesInner(value)) {
+//						matched = false;
+//					}
+//				}
+//			}
+			
+			for(int i = 0; i < this.matchers.size(); i++) {
+				if(! this.matchers.get(i).matchesInner(matchAgainst(item).get(i)) ) {
+//					matched = false;
+					this.failedItem = matchAgainst(item).get(i);
 					this.setFailed(true);
+					return false;
 				}
 			}
+			
+//			if(!matched) {
+//				this.setFailed(true);
+//			}
 		}
 		
 		return !this.isFailed();
 	}
+	
+	
 	
 	
 	@Override
@@ -61,14 +83,15 @@ public abstract class ChainableMatcher<T> extends TypeSafeMatcher<T> {
 		this.chainedMismatch(item, desc);
 		for(ChainableMatcher matcher : matchers) {
 			if(matcher.isFailed()) {
-				matcher.innerMismatch(item, desc, index+1);
+				matcher.innerMismatch(this.failedItem, desc, index+1);
 			}
 		}
 	}
 	
+	protected abstract List matchAgainst(T item);
 	protected abstract void chainedDescribeTo(Description desc);
 	protected abstract void chainedMismatch(T item, Description desc);
-	protected abstract boolean match(T arg0);
+	protected abstract boolean match(List arg0);
 	
 	
 	public boolean isFailed() {
@@ -86,5 +109,7 @@ public abstract class ChainableMatcher<T> extends TypeSafeMatcher<T> {
 		}
 		return indent;
 	}
+
+	
 	
 }
