@@ -7,6 +7,7 @@ import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 
 import com.gargoylesoftware.htmlunit.html.DomNode;
+import com.gargoylesoftware.htmlunit.html.HtmlSelect;
 
 public abstract class ChainableMatcher<T> extends TypeSafeMatcher<T> {
 
@@ -90,8 +91,11 @@ public abstract class ChainableMatcher<T> extends TypeSafeMatcher<T> {
 	
 	protected abstract List matchAgainst(T item);
 	protected abstract void chainedDescribeTo(Description desc);
-	protected abstract void chainedMismatch(T item, Description desc);
 	protected abstract boolean match(List arg0);
+	
+	protected void chainedMismatch(T item, Description desc){
+		desc.appendText("On " + StringUtils.print((DomNode)item));
+	}
 	
 	
 	public boolean isFailed() {

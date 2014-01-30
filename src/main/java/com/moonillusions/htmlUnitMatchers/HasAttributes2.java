@@ -45,14 +45,22 @@ public class HasAttributes2 extends ChainableMatcher<DomNode> {
 	    return new HasAttributes2(attributes);
 	}
 
-	@Override
-	protected void chainedDescribeTo(Description desc) {
-		desc.appendText("DomNode that:");
+	protected void chainedMismatch(DomNode item, Description desc){
+		desc.appendText("On attributes ");
+		printAttributes(item,desc);
+	}
+	
+	private void printAttributes(DomNode item, Description desc) {
+		List<Attribute> nodes = new ArrayList<Attribute>();
+		for(int i = 0; i < item.getAttributes().getLength(); i++) {
+			nodes.add(new Attribute(item.getAttributes().item(i)));
+		}
+		desc.appendValueList("[", ",", "]",nodes );
 	}
 
 	@Override
-	protected void chainedMismatch(DomNode item, Description desc) {
-		desc.appendText("On DomNode " + StringUtils.print(item));
+	protected void chainedDescribeTo(Description desc) {
+		desc.appendText("DomNode that:");
 	}
 
 	@Override

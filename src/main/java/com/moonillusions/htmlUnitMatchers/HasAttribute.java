@@ -26,7 +26,7 @@ public class HasAttribute extends ChainableMatcher<DomNode> {
 	protected void chainedMismatch(DomNode item, Description desc) {
 		
 		if(matchingAttribute(item) != null) {
-			desc.appendText("on Attribute[" + matchingAttribute(item) + "] failed because ");
+			desc.appendText("On Attribute[" + matchingAttribute(item) + "] failed because ");
 			desc.appendText("value '" + value(item) + "' did not match expected value of '" + this.attribute.getValue() + "'");
 		} else {
 			desc.appendText("not found at all");

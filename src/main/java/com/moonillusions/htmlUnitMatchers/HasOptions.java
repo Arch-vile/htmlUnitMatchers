@@ -44,13 +44,8 @@ public class HasOptions extends ChainableMatcher<HtmlSelect> {
 
 	@Override
 	protected void chainedDescribeTo(Description desc) {
-		desc.appendText("HtmlSelect element that");
+		desc.appendText("HtmlSelect that in order");
 		
-	}
-
-	@Override
-	protected void chainedMismatch(HtmlSelect item, Description desc){
-		desc.appendText("On HtmlSelect " + StringUtils.print(item));
 	}
 
 	@Override

@@ -21,15 +21,9 @@ public class IsOption extends ChainableMatcher<HtmlOption> {
 
 	@Override
 	protected void chainedDescribeTo(Description desc) {
-		desc.appendText("Has option: ");
+		desc.appendText("HtmlOption that:");
 	}
 
-	@Override
-	protected void chainedMismatch(HtmlOption item, Description desc) {
-		desc.appendText("On option:");
-
-	}
-	
 	@Override
 	protected List<HtmlOption> matchAgainst(HtmlOption option) {
 		return Arrays.asList(option);
