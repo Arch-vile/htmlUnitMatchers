@@ -8,7 +8,7 @@ import org.hamcrest.Description;
 import com.gargoylesoftware.htmlunit.html.HtmlOption;
 import com.gargoylesoftware.htmlunit.html.HtmlOption;
 
-import static com.moonillusions.htmlUnitMatchers.HasAttributes2.hasAttributes;
+import static com.moonillusions.htmlUnitMatchers.HasAttributes.hasAttributes;
 
 public class IsOption extends ChainableMatcher<HtmlOption> {
 

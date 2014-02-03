@@ -19,7 +19,6 @@ import com.gargoylesoftware.htmlunit.html.HtmlOption;
 import com.gargoylesoftware.htmlunit.html.HtmlSelect;
 
 import static com.moonillusions.htmlUnitMatchers.AsText.asText;
-import static com.moonillusions.htmlUnitMatchers.HasAttributes.hasAttributes;
 import static org.hamcrest.Matchers.contains;
 
 public class HasOptions extends ChainableMatcher<HtmlSelect> { 

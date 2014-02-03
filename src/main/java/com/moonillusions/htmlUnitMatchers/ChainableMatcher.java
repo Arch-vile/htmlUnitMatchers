@@ -36,28 +36,13 @@ public abstract class ChainableMatcher<T> extends TypeSafeMatcher<T> {
 			this.setFailed(!this.match(this.matchAgainst(item)));
 		} else {
 			
-//			boolean matched = true;
-			
-//			for(Object value : this.matchAgainst(item)) {
-//				for(ChainableMatcher matcher : this.matchers) {
-//					if(!matcher.matchesInner(value)) {
-//						matched = false;
-//					}
-//				}
-//			}
-			
 			for(int i = 0; i < this.matchers.size(); i++) {
 				if(! this.matchers.get(i).matchesInner(matchAgainst(item).get(i)) ) {
-//					matched = false;
 					this.failedItem = matchAgainst(item).get(i);
 					this.setFailed(true);
 					return false;
 				}
 			}
-			
-//			if(!matched) {
-//				this.setFailed(true);
-//			}
 		}
 		
 		return !this.isFailed();

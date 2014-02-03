@@ -20,62 +20,63 @@ import org.w3c.dom.Node;
 import com.gargoylesoftware.htmlunit.html.DomElement;
 import com.gargoylesoftware.htmlunit.html.DomNode;
 
-public class HasAttributes extends BaseElementMatcher<DomNode>  {
+public class HasAttributes extends ChainableMatcher<DomNode> {
 
-	private List<Attribute> attributes;
 	
-	public HasAttributes() {
+	public HasAttributes(Attribute ... attributes) {
+		for(Attribute attribute : attributes) {
+			addMatcher(new IsAttribute(attribute));
+		}
 	}
-	
+
 	public HasAttributes(List<Attribute> attributes) {
-		this.attributes = attributes;
+		for(Attribute attribute : attributes) {
+			addMatcher(new HasAttribute(attribute));
+		}
 	}
 
-	
-
-	
-	@Override
-	protected boolean matchesSafely(DomNode domNode) {
-		NamedNodeMap mp = domNode.getAttributes();
-		
-		List<Attribute> actual = new ArrayList<Attribute>();
-		for(int i = 0; i < mp.getLength(); i++){
-			actual.add(new Attribute(mp.item(i)));
-		}
-		
-		if(this.attributes.isEmpty()) {
-			Matcher matcher = empty();
-			if(!applyMatcher(actual, matcher)) {
-				setMismatchMessage("found");
-				return false;
-			} else {
-				return true;
-			}
-		}
-		
-		Matcher<Iterable<? extends Object>> matcher = contains(this.attributes.toArray());
-		if(!applyMatcher(actual, matcher)) {
-			return false;
-		}
-		
-		return true;
-	}
-
-	
-	
 	@Factory
-	public static <T> Matcher<DomNode> hasAttributes(Attribute...attr) {
-	    return new HasAttributes(Arrays.asList(attr));
+	public static ChainableMatcher<DomNode> hasAttributes(Attribute...attr) {
+	    return new HasAttributes(attr);
 	}
 	
 	@Factory
-	public static <T> Matcher<DomNode> hasAttributes(List<Attribute> attrs) {
-	    return new HasAttributes(attrs);
+	public static ChainableMatcher<DomNode> hasAttributes(List<Attribute> attributes) {
+	    return new HasAttributes(attributes);
+	}
+
+	protected void chainedMismatch(DomNode item, Description desc){
+		desc.appendText("On attributes: ");
+		printAttributes(item,desc);
+	}
+	
+	private void printAttributes(DomNode item, Description desc) {
+		List<Node> nodes = getAttributes(item);
+		desc.appendValueList("[", ",", "]",nodes );
+	}
+
+	private List<Node> getAttributes(DomNode item) {
+		List<Node> nodes = new ArrayList<Node>();
+		for(int i = 0; i < item.getAttributes().getLength(); i++) {
+			nodes.add(item.getAttributes().item(i));
+		}
+		return nodes;
 	}
 
 	@Override
-	protected Description getDescribeTo(Description description) {
-		return description.appendText("DomNode with attributes: ");
+	protected void chainedDescribeTo(Description desc) {
+		desc.appendText("DomNode that in order:");
 	}
+
+	@Override
+	protected List<Node> matchAgainst(DomNode item) {
+		return getAttributes(item);
+	}
+
+	@Override
+	protected boolean match(List arg0) {
+		return false;
+	}
+
 
 }

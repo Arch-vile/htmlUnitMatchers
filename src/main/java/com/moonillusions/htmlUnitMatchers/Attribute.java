@@ -41,7 +41,7 @@ public class Attribute {
 
 	@Override
 	public String toString() {
-		return this.name + "='" + this.value + "'";
+		return "Attribute[name=" + this.name + " value=" + this.value + "]";
 	}
 	
 	@Override

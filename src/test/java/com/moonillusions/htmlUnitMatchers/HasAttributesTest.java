@@ -60,10 +60,9 @@ public class HasAttributesTest {
 		Matcher<DomNode> test = hasAttributes(new Attribute("attr2", 2), new Attribute("attr1",1));
 		
 		assertThat(test.matches(span), equalTo(false));
-		TestUtils.assertDescribeMismatch(test, span, "item 0: was <" +
-				new Attribute("attr1", 1) + 
-				"> in " + 
-				StringUtils.print(span));
+		TestUtils.assertDescribeMismatch(test, span, 
+				"\n*On attributes: [<DomAttr[name=attr1 value=1]>,<DomAttr[name=attr2 value=2]>]"
+				+ "\n**On attribute: DomAttr[name=attr1 value=1] did not match expected name=attr2");
 	}
 	
 	@Test
