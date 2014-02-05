@@ -11,6 +11,8 @@ import com.gargoylesoftware.htmlunit.html.HtmlSelect;
 
 public abstract class ChainableMatcher<T> extends TypeSafeMatcher<T> {
 
+	MatchableExtractor extractor;
+	
 	private boolean failed = false;
 	private List<ChainableMatcher> matchers = new ArrayList<ChainableMatcher>();
 	
@@ -18,6 +20,11 @@ public abstract class ChainableMatcher<T> extends TypeSafeMatcher<T> {
 	
 	protected void addMatcher(ChainableMatcher matcher){
 		this.matchers.add(matcher);
+	}
+	
+	
+	public void setExtractor(MatchableExtractor extractor) {
+		this.extractor = extractor;
 	}
 
 	public final void describeTo(Description desc) {
@@ -29,23 +36,31 @@ public abstract class ChainableMatcher<T> extends TypeSafeMatcher<T> {
 		return matchesInner(item);
 	}
 	
+	final Object matchAgainst(Object from) {
+		if(this.extractor != null) {
+			return this.extractor.getMatchable(from);
+		}
+		return from;
+	}
 	
-	protected final boolean matchesInner(T item) {
+	protected final boolean matchesInner(Object item) {
 		
-		if(this.matchers.isEmpty()) {
-			this.setFailed(!this.match(this.matchAgainst(item)));
-		} else {
-			
-			for(int i = 0; i < this.matchers.size(); i++) {
-				if(! this.matchers.get(i).matchesInner(matchAgainst(item).get(i)) ) {
-					this.failedItem = matchAgainst(item).get(i);
+		boolean match = this.match(matchAgainst(item));
+		
+		if(match) {
+			for(ChainableMatcher matcher : this.matchers) {
+				if(! matcher.matchesInner(item)){
 					this.setFailed(true);
 					return false;
 				}
 			}
+			return true;
+			
+		} else {
+			this.setFailed(true);
+			failedItem = matchAgainst(item);
+			return false;
 		}
-		
-		return !this.isFailed();
 	}
 	
 	
@@ -64,21 +79,24 @@ public abstract class ChainableMatcher<T> extends TypeSafeMatcher<T> {
 		}
 	}
 	
-	private void innerMismatch(T item, Description desc, int index) {
+	private void innerMismatch(Object item, Description desc, int index) {
+		Object matched = matchAgainst(item);
 		desc.appendText("\n"+indent(index));
-		this.chainedMismatch(item, desc);
+		this.chainedMismatch(matched, desc);
 		for(ChainableMatcher matcher : matchers) {
 			if(matcher.isFailed()) {
-				matcher.innerMismatch(this.failedItem, desc, index+1);
+				matcher.innerMismatch(matched,desc, index+1);
 			}
 		}
 	}
 	
-	protected abstract List matchAgainst(T item);
-	protected abstract void chainedDescribeTo(Description desc);
-	protected abstract boolean match(List arg0);
 	
-	protected void chainedMismatch(T item, Description desc){
+	protected abstract void chainedDescribeTo(Description desc);
+	protected boolean match(Object item) {
+		return true;
+	}
+	
+	protected void chainedMismatch(Object item, Description desc){
 		desc.appendText("On " + StringUtils.print((DomNode)item));
 	}
 	

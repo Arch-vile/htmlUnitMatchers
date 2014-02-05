@@ -24,26 +24,20 @@ public class HasAttributes extends ChainableMatcher<DomNode> {
 
 	
 	public HasAttributes(Attribute ... attributes) {
-		for(Attribute attribute : attributes) {
-			addMatcher(new IsAttribute(attribute));
+		for(int i = 0; i < attributes.length; i++) {
+			IsAttribute m = new IsAttribute(attributes[i]);
+			m.setExtractor(new AttributeExtractor(i));
+			addMatcher(m);
 		}
 	}
-
-	public HasAttributes(List<Attribute> attributes) {
-		for(Attribute attribute : attributes) {
-			addMatcher(new HasAttribute(attribute));
-		}
-	}
+	
 
 	@Factory
 	public static ChainableMatcher<DomNode> hasAttributes(Attribute...attr) {
 	    return new HasAttributes(attr);
 	}
 	
-	@Factory
-	public static ChainableMatcher<DomNode> hasAttributes(List<Attribute> attributes) {
-	    return new HasAttributes(attributes);
-	}
+	
 
 	protected void chainedMismatch(DomNode item, Description desc){
 		desc.appendText("On attributes: ");
@@ -66,16 +60,6 @@ public class HasAttributes extends ChainableMatcher<DomNode> {
 	@Override
 	protected void chainedDescribeTo(Description desc) {
 		desc.appendText("DomNode that in order:");
-	}
-
-	@Override
-	protected List<Node> matchAgainst(DomNode item) {
-		return getAttributes(item);
-	}
-
-	@Override
-	protected boolean match(List arg0) {
-		return false;
 	}
 
 

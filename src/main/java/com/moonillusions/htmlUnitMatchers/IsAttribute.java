@@ -13,6 +13,8 @@ public class IsAttribute extends ChainableMatcher<Node> {
 
 	Attribute attribute;
 	
+	private String failReason;
+	
 	public IsAttribute(Attribute attribute) {
 		this.attribute = attribute;
 	}
@@ -23,14 +25,22 @@ public class IsAttribute extends ChainableMatcher<Node> {
 	}
 	
 	@Override
-	protected void chainedMismatch(Node item, Description desc) {
-		desc.appendText("On attribute: " + item + " did not match expected ");
+	protected void chainedMismatch(Object item, Description desc) {
+		desc.appendText("On attribute: " + item + " did not match expected " + failReason);
 	}
 
 	@Override
-	protected boolean match(List nodes2) {
-		Node node = (Node)nodes2.get(0);
-		return matchesValue(node) && matchesName(node);
+	protected boolean match(Object item) {
+		if(!matchesName((Node)item)) {
+			this.failReason = "name=" + attribute.getName();
+			return false;
+		}
+		
+		if(!matchesValue((Node)item)) {
+			this.failReason = "value=" + attribute.getValue();
+			return false;
+		}
+		return true;
 	}
 
 	private boolean matchesName(Node node) {
@@ -41,9 +51,5 @@ public class IsAttribute extends ChainableMatcher<Node> {
 		return node.getNodeValue().equals(attribute.getValue());
 	}
 	
-	@Override
-	protected List<Node> matchAgainst(Node item) {
-		return Arrays.asList(item);
-	}
 
 }

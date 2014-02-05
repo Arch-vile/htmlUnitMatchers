@@ -16,7 +16,7 @@ public class IsOption extends ChainableMatcher<HtmlOption> {
 	
 	public IsOption(Option option) {
 		this.option = option;
-		addMatcher(hasAttributes(option.getAttributes()));
+		//addMatcher(hasAttributes(option.getAttributes()));
 	}
 
 	@Override
