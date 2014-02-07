@@ -3,6 +3,7 @@ package foo;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.http.annotation.Immutable;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 import org.w3c.dom.NamedNodeMap;
@@ -55,6 +56,5 @@ public class IsAttribute extends MyTypeSafeMatcher<Node> {
 	protected void mismatch(Node item, Description mismatchDescription) {
 		mismatchDescription.appendText("On attribute: " + item + " did not match expected " + failReason);
 	}
-
 
 }

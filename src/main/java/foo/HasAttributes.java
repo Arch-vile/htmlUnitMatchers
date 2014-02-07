@@ -22,7 +22,7 @@ import com.gargoylesoftware.htmlunit.html.DomNode;
 import com.moonillusions.htmlUnitMatchers.Attribute;
 import com.moonillusions.htmlUnitMatchers.StringUtils;
 
-public class HasAttributes extends MyTypeSafeMatcher<DomNode> {
+public class HasAttributes extends MyCombiningTypeSafeMatcher<DomNode> {
 
 	Attribute[] attributes;
 	
@@ -43,7 +43,7 @@ public class HasAttributes extends MyTypeSafeMatcher<DomNode> {
 
 	public void describeTo(Description desc) {
 		desc.appendText("DomNode that in order:");
-		for(MatcherPair pair : this.matchers) {
+		for(MatcherPair pair : this.getMatchers()) {
 			desc.appendText("\n");
 			desc.appendDescriptionOf(pair.getMatcher());
 		}
@@ -55,7 +55,7 @@ public class HasAttributes extends MyTypeSafeMatcher<DomNode> {
 		
 		createMatcherPairs(arg0);
 
-		for(MatcherPair pair : this.matchers) {
+		for(MatcherPair pair : this.getMatchers()) {
 			if(!pair.isMatch()) {
 				this.setFailedMatcher(pair);
 				return false;
@@ -71,7 +71,7 @@ public class HasAttributes extends MyTypeSafeMatcher<DomNode> {
 			IsAttribute isAttr = new IsAttribute(this.attributes[i]);
 			Node node = getAttributes(arg0).get(i);
 			MatcherPair matcherPair = new MatcherPair(isAttr, node);
-			this.matchers.add(matcherPair);
+			this.addMatcher(matcherPair);
 		}
 	}
 
