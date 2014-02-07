@@ -16,5 +16,13 @@ public class StringUtils {
 		asString.append("]");
 		return asString.toString();
 	}
+	
+	public static String indent(int count) {
+		String indent = "\n";
+		for(int i = 0; i < count; i++) {
+			indent += "*";
+		}
+		return indent;
+	}
 
 }

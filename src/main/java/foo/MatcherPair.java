@@ -4,16 +4,16 @@ import org.hamcrest.TypeSafeMatcher;
 import org.w3c.dom.Node;
 
 public class MatcherPair {
-	private TypeSafeMatcher matcher;
+	private MyTypeSafeMatcher matcher;
 	private Object matchee;
-	public MatcherPair(TypeSafeMatcher matcher, Object matchee) {
+	public MatcherPair(MyTypeSafeMatcher matcher, Object matchee) {
 		this.matcher = matcher;
 		this.matchee = matchee;
 	}
-	public TypeSafeMatcher getMatcher() {
+	public MyTypeSafeMatcher getMatcher() {
 		return matcher;
 	}
-	public void setMatcher(TypeSafeMatcher matcher) {
+	public void setMatcher(MyTypeSafeMatcher matcher) {
 		this.matcher = matcher;
 	}
 	public Object getMatchee() {

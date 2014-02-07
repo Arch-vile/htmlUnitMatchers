@@ -10,8 +10,9 @@ import org.w3c.dom.Node;
 
 import com.gargoylesoftware.htmlunit.html.DomNode;
 import com.moonillusions.htmlUnitMatchers.Attribute;
+import com.moonillusions.htmlUnitMatchers.StringUtils;
 
-public class IsAttribute extends TypeSafeMatcher<Node> {
+public class IsAttribute extends MyTypeSafeMatcher<Node> {
 
 	Attribute attribute;
 	private Node failed;
@@ -26,12 +27,6 @@ public class IsAttribute extends TypeSafeMatcher<Node> {
 		arg0.appendText("Has attribute: " + attribute);
 	}
 	
-	@Override
-	protected void describeMismatchSafely(Node item,
-			Description mismatchDescription) {
-		mismatchDescription.appendText("On attribute: " + item + " did not match expected " + failReason);
-	}
-
 	@Override
 	protected boolean matchesSafely(Node node) {
 		if(!matchesName(node)) {
@@ -54,6 +49,11 @@ public class IsAttribute extends TypeSafeMatcher<Node> {
 
 	private boolean matchesValue(Node node) {
 		return node.getNodeValue().equals(attribute.getValue());
+	}
+
+	@Override
+	protected void mismatch(Node item, Description mismatchDescription) {
+		mismatchDescription.appendText("On attribute: " + item + " did not match expected " + failReason);
 	}
 
 

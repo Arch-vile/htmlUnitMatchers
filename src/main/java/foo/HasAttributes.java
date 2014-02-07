@@ -22,11 +22,9 @@ import com.gargoylesoftware.htmlunit.html.DomNode;
 import com.moonillusions.htmlUnitMatchers.Attribute;
 import com.moonillusions.htmlUnitMatchers.StringUtils;
 
-public class HasAttributes extends TypeSafeMatcher<DomNode> {
+public class HasAttributes extends MyTypeSafeMatcher<DomNode> {
 
 	Attribute[] attributes;
-	private MatcherPair failedMatcher;
-	List<MatcherPair> matchers = new ArrayList<MatcherPair>();
 	
 	public HasAttributes(Attribute ... attributes) {
 		this.attributes = attributes;
@@ -38,15 +36,6 @@ public class HasAttributes extends TypeSafeMatcher<DomNode> {
 	    return new HasAttributes(attr);
 	}
 
-	@Override
-	protected void describeMismatchSafely(DomNode item,
-			Description mismatchDescription) {
-		mismatchDescription.appendText("On " + StringUtils.print(item));
-		printAttributes(item,mismatchDescription);
-		mismatchDescription.appendText("\n");
-		this.failedMatcher.getMatcher().describeMismatch(this.failedMatcher.getMatchee(), mismatchDescription);
-	}
-	
 	private void printAttributes(DomNode item, Description desc) {
 		List<Node> nodes = getAttributes(item);
 		desc.appendValueList("\nOn Attributes[", ",", "]",nodes );
@@ -68,7 +57,7 @@ public class HasAttributes extends TypeSafeMatcher<DomNode> {
 
 		for(MatcherPair pair : this.matchers) {
 			if(!pair.isMatch()) {
-				this.failedMatcher = pair;
+				this.setFailedMatcher(pair);
 				return false;
 			}
 		}
@@ -93,6 +82,13 @@ public class HasAttributes extends TypeSafeMatcher<DomNode> {
 			nodes.add(item.getAttributes().item(i));
 		}
 		return nodes;
+	}
+
+
+	@Override
+	protected void mismatch(DomNode item, Description mismatchDescription) {
+		mismatchDescription.appendText("On " + StringUtils.print(item));
+		printAttributes(item,mismatchDescription);
 	}
 
 
