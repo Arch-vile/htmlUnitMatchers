@@ -12,9 +12,11 @@ import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.html.DomNode;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 
-import static com.moonillusions.htmlUnitMatchers.HasAttributes.hasAttributes;
+import static foo.HasAttributes.hasAttributes;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+
+
 
 
 public class HasAttributesTest {
@@ -59,7 +61,7 @@ public class HasAttributesTest {
 		HtmlElement span = TestUtils.createDomNode("<span attr1='1' attr2=\"2\">text</span>");
 		Matcher<DomNode> test = hasAttributes(new Attribute("attr2", 2), new Attribute("attr1",1));
 		
-		//assertThat(span, test);
+		assertThat(span, test);
 		
 		assertThat(test.matches(span), equalTo(false));
 		TestUtils.assertDescribeMismatch(test, span, 
