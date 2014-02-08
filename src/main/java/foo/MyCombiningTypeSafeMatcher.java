@@ -1,39 +1,53 @@
 package foo;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.hamcrest.Description;
 
+import com.moonillusions.htmlUnitMatchers.StringUtils;
+
 public abstract class MyCombiningTypeSafeMatcher<T> extends MyTypeSafeMatcher<T>{
 
 	private MatcherPair failedMatcher;
-	private List<MatcherPair> matchers = new ArrayList<MatcherPair>();
-
+	private List<MatcherPair> matchers;
+	
 	@Override
 	protected void describeMismatchSafely(T item, Description mismatchDescription) {
-		this.mismatch(item, mismatchDescription);
-		if(this.getFailedMatcher() != null) {
-			this.failedMatcher.getMatcher().describeInnerMismatch(this.failedMatcher.getMatchee(), mismatchDescription,1);
+		super.describeMismatchSafely(item, mismatchDescription);
+//		mismatchDescription.appendText(StringUtils.indent(matcherDepth));
+		this.failedMatcher.getMatcher().describeMismatchSafely(this.failedMatcher.getMatchee(), mismatchDescription);
+	}
+	
+	
+//	protected void describeInnerMismatch(T item,
+//			Description mismatchDescription, int matcherDepth) {
+//		mismatchDescription.appendText(StringUtils.indent(matcherDepth));
+//		this.describeMismatchSafely(item, mismatchDescription);
+//	}
+	
+	@Override
+	public void describeTo(Description arg0) {
+		super.describeTo(arg0);
+		for(MatcherPair pair : this.matchers) {
+			arg0.appendText("\n");
+			arg0.appendDescriptionOf(pair.getMatcher());
 		}
 	}
 	
-	protected MatcherPair getFailedMatcher() {
-		return this.failedMatcher;
-	}
-	
-	protected void setFailedMatcher(MatcherPair failed) {
-		this.failedMatcher = failed;
-	}
-	
-	protected List<MatcherPair> getMatchers() {
-		return this.matchers;
-	}
-	
-	protected void addMatcher(MatcherPair pair) {
-		this.matchers.add(pair);
+	@Override
+	protected boolean match(T arg0) {
+		this.matchers = createMatcherPairs(arg0);
+		for(MatcherPair pair : this.matchers) {
+			if(!pair.isMatch()) {
+				this.failedMatcher = pair;
+				return false;
+			}
+		}
+		
+		return true;
 	}
 	
 	
+	protected abstract List<MatcherPair> createMatcherPairs(T arg0);
 	
 }

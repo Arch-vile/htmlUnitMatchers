@@ -29,50 +29,30 @@ public class HasAttributes extends MyCombiningTypeSafeMatcher<DomNode> {
 	public HasAttributes(Attribute ... attributes) {
 		this.attributes = attributes;
 	}
-	
-
-	@Factory
-	public static HasAttributes hasAttributes(Attribute...attr) {
-	    return new HasAttributes(attr);
-	}
-
-	private void printAttributes(DomNode item, Description desc) {
-		List<Node> nodes = getAttributes(item);
-		desc.appendValueList("\nOn Attributes[", ",", "]",nodes );
-	}
-
-	public void describeTo(Description desc) {
-		desc.appendText("DomNode that in order:");
-		for(MatcherPair pair : this.getMatchers()) {
-			desc.appendText("\n");
-			desc.appendDescriptionOf(pair.getMatcher());
-		}
-	}
-
 
 	@Override
-	protected boolean matchesSafely(DomNode arg0) {
+	public void describe(Description desc) {
+		desc.appendText("DomNode that in order:");
 		
-		createMatcherPairs(arg0);
-
-		for(MatcherPair pair : this.getMatchers()) {
-			if(!pair.isMatch()) {
-				this.setFailedMatcher(pair);
-				return false;
-			}
-		}
-		
-		return true;
 	}
 	
+	@Override
+	protected void mismatch(DomNode item, Description mismatchDescription) {
+		mismatchDescription.appendText("On " + StringUtils.print(item));
+		printAttributes(item,mismatchDescription);
+	}
 
-	private void createMatcherPairs(DomNode arg0) {
+	@Override
+	protected List<MatcherPair> createMatcherPairs(DomNode arg0) {
+		List<MatcherPair> matchers = new ArrayList<MatcherPair>();
 		for(int i = 0; i < this.attributes.length; i++) {
 			IsAttribute isAttr = new IsAttribute(this.attributes[i]);
 			Node node = getAttributes(arg0).get(i);
 			MatcherPair matcherPair = new MatcherPair(isAttr, node);
-			this.addMatcher(matcherPair);
+			matchers.add(matcherPair);
 		}
+		
+		return matchers;
 	}
 
 
@@ -85,11 +65,14 @@ public class HasAttributes extends MyCombiningTypeSafeMatcher<DomNode> {
 	}
 
 
-	@Override
-	protected void mismatch(DomNode item, Description mismatchDescription) {
-		mismatchDescription.appendText("On " + StringUtils.print(item));
-		printAttributes(item,mismatchDescription);
+	private void printAttributes(DomNode item, Description desc) {
+		List<Node> nodes = getAttributes(item);
+		desc.appendValueList("\nOn Attributes[", ",", "]",nodes );
 	}
 
 
+	@Factory
+	public static HasAttributes hasAttributes(Attribute...attr) {
+	    return new HasAttributes(attr);
+	}
 }

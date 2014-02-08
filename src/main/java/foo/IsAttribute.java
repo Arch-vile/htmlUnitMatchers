@@ -24,12 +24,18 @@ public class IsAttribute extends MyTypeSafeMatcher<Node> {
 		this.attribute = attribute;
 	}
 
-	public void describeTo(Description arg0) {
+	@Override
+	protected void describe(Description arg0) {
 		arg0.appendText("Has attribute: " + attribute);
 	}
 	
 	@Override
-	protected boolean matchesSafely(Node node) {
+	protected void mismatch(Node item, Description mismatchDescription) {
+		mismatchDescription.appendText("On attribute: " + item + " did not match expected " + failReason);
+	}
+	
+	@Override
+	protected boolean match(Node node) {
 		if(!matchesName(node)) {
 			this.failReason = "name=" + attribute.getName();
 			this.failed = node;
@@ -52,9 +58,6 @@ public class IsAttribute extends MyTypeSafeMatcher<Node> {
 		return node.getNodeValue().equals(attribute.getValue());
 	}
 
-	@Override
-	protected void mismatch(Node item, Description mismatchDescription) {
-		mismatchDescription.appendText("On attribute: " + item + " did not match expected " + failReason);
-	}
+	
 
 }
