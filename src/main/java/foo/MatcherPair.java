@@ -5,10 +5,11 @@ import org.w3c.dom.Node;
 
 public class MatcherPair {
 	private MyTypeSafeMatcher matcher;
-	private Object matchee;
-	public MatcherPair(MyTypeSafeMatcher matcher, Object matchee) {
+	private MatchableExtractor extractor;
+	
+	public MatcherPair(MyTypeSafeMatcher matcher, MatchableExtractor extractor) {
 		this.matcher = matcher;
-		this.matchee = matchee;
+		this.extractor = extractor;
 	}
 	public MyTypeSafeMatcher getMatcher() {
 		return matcher;
@@ -16,15 +17,14 @@ public class MatcherPair {
 	public void setMatcher(MyTypeSafeMatcher matcher) {
 		this.matcher = matcher;
 	}
-	public Object getMatchee() {
-		return matchee;
+
+	public boolean isMatch(Object from) {
+		return this.matcher.matches(extractor.extract(from));
 	}
-	public void setMatchee(Object matchee) {
-		this.matchee = matchee;
+	public MatchableExtractor getExtractor() {
+		return extractor;
 	}
-	public boolean isMatch() {
-		return this.matcher.matches(matchee);
-	}
+	
 	
 	
 
