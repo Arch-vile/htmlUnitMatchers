@@ -67,7 +67,7 @@ public class HasAttributes extends MyCombiningTypeSafeMatcher<DomNode> {
 
 	private void printAttributes(DomNode item, Description desc) {
 		List<Node> nodes = getAttributes(item);
-		desc.appendValueList("\nOn Attributes[", ",", "]",nodes );
+		desc.appendValueList(" on Attributes[", ",", "]",nodes );
 	}
 
 

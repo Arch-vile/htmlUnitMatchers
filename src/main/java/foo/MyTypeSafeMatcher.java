@@ -8,8 +8,15 @@ import com.moonillusions.htmlUnitMatchers.StringUtils;
 
 public abstract class MyTypeSafeMatcher<T> extends TypeSafeMatcher<T> {
 	
+	private MyTypeSafeMatcher parent;
+	
 	public void describeTo(Description arg0) {
 		this.describe(arg0);
+	}
+	
+	public void describeTo(Description arg0, int indent) {
+		arg0.appendText(StringUtils.indent(indent));
+		describeTo(arg0);
 	}
 	
 	@Override
@@ -23,10 +30,21 @@ public abstract class MyTypeSafeMatcher<T> extends TypeSafeMatcher<T> {
 		mismatch(item, mismatchDescription);
 	}
 	
+	protected void describeMismatchSafely(T item,
+			Description mismatchDescription, int indent) {
+		mismatchDescription.appendText(StringUtils.indent(indent));
+		describeMismatchSafely(item,mismatchDescription);
+	}
 	
+	
+	public MyTypeSafeMatcher getParent() {
+		return parent;
+	}
 
-	
-	
+	public void setParent(MyTypeSafeMatcher parent) {
+		this.parent = parent;
+	}
+
 	protected abstract void mismatch(T item, Description mismatchDescription);
 	protected abstract boolean match(T item);
 	protected abstract void describe(Description arg0);
