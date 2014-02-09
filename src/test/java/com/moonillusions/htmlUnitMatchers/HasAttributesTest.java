@@ -28,7 +28,7 @@ public class HasAttributesTest {
 	@Test
 	public void matches() throws IOException {
         assertThat(TestUtils
-        		.createDomNode("<span attr1='1' attr2=\"2\">text</span>"), 
+        		.createDomNode("<span attr1='1' attr2='2'>text</span>"), 
         		hasAttributes(new Attribute("attr1", 1), new Attribute("attr2",2)));
         
 	}
@@ -50,87 +50,64 @@ public class HasAttributesTest {
 	@Test
 	public void matchesDuplicateAttributes() throws IOException {
         assertThat(TestUtils
-        		.createDomNode("<span attr1='1' attr1='1'>text</span>"), 
+        		.createDomNode("<span attr1='1' attr1='2'>text</span>"), 
         		hasAttributes(new Attribute("attr1", "1")));
 	}
 	
 	
 	
+	
+	
 	@Test
-	public void failsIfWrongOrder() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
-		HtmlElement span = TestUtils.createDomNode("<span attr1='1' attr2=\"2\">text</span>");
+	public void mismatchIfAttributesInWrongOrder() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
+		HtmlElement span = TestUtils.createDomNode("<span attr1='1' attr2='2'>text</span>");
 		Matcher<DomNode> test = hasAttributes(new Attribute("attr2", 2), new Attribute("attr1",1));
-		
 		assertThat(test.matches(span), equalTo(false));
-		TestUtils.assertDescribeMismatch(test, span, 
-				"On HtmlSpan[<span attr1=1 attr2=2>text</span>] on Attributes[<DomAttr[name=attr1 value=1]>,<DomAttr[name=attr2 value=2]>]"
-				+ "\n*On attribute: DomAttr[name=attr1 value=1] did not match expected name=attr2");
 	}
 	
 	@Test
-	public void failsIfElementHasExtraAttributes() throws IOException {
-		HtmlElement span = TestUtils.createDomNode("<span attr1='1' attr2=\"2\" attr3='3'>text</span>");
+	public void mismatchIfTooManyAttributes() throws IOException {
+		HtmlElement span = TestUtils.createDomNode("<span attr1='1' attr2='2' attr3='3'>text</span>");
 		Matcher<DomNode> test = hasAttributes(new Attribute("attr1", 1), new Attribute("attr2",2));
-		
 		assertThat(test.matches(span), equalTo(false));
-		TestUtils.assertDescribeTo(test, "DomNode with attributes: <iterable containing [<attr1='1'>, <attr2='2'>]>");
-		TestUtils.assertDescribeMismatch(test, span, "Not matched: <" +
-				new Attribute("attr3", 3) + 
-				"> in " + 
-				StringUtils.print(span));
-		
 	}
 	
 	
 	@Test
-	public void failsIfElementHasLessAttributes() throws IOException {
-		Matcher<DomNode> test = hasAttributes(new Attribute("attr1", 1), new Attribute("attr2",2));
+	public void mismatchIfTooFewAttributes() throws IOException {
 		HtmlElement span = TestUtils.createDomNode("<span attr1='1'>text</span>");
-		
+		Matcher<DomNode> test = hasAttributes(new Attribute("attr1", 1), new Attribute("attr2",2));
 		assertThat(test.matches(span), equalTo(false));
-		TestUtils.assertDescribeTo(test, "DomNode with attributes: <iterable containing [<attr1='1'>, <attr2='2'>]>");
-		TestUtils.assertDescribeMismatch(test, span, "No item matched: <" +
-				new Attribute("attr2", 2) + 
-				"> in " + 
-				StringUtils.print(span));
 	}
 	
 	@Test
-	public void failsIfAttributeValuesNoMatch() throws IOException {
-		Matcher<DomNode> test = hasAttributes(new Attribute("attr1", 1), new Attribute("attr2",2));
-		assertThat(test
-				.matches(TestUtils.createDomNode("<span attr1='1' attr2='3'>text</span>")), 
-				equalTo(false));
+	public void mismatchIfAttributeValueNoMatch() throws IOException {
+		HtmlElement span = TestUtils.createDomNode("<span attr1='1'>text</span>");
+		Matcher<DomNode> test = hasAttributes(new Attribute("attr1", "one"));
+		assertThat(test.matches(span), equalTo(false));
 	}
 	
-	
 	@Test
-	public void failsIfElementHasNoAttributes() throws IOException {
-		Matcher<DomNode> test = hasAttributes(new Attribute("attr1", 1), new Attribute("attr2",2));
+	public void mismatchIfNoAttributes() throws IOException {
 		HtmlElement span = TestUtils.createDomNode("<span>text</span>");
+		Matcher<DomNode> test = hasAttributes(new Attribute("attr1", 1));
 		assertThat(test.matches(span),equalTo(false));
-		TestUtils.assertDescribeTo(test, "DomNode with attributes: <iterable containing [<attr1='1'>, <attr2='2'>]>");
-		TestUtils.assertDescribeMismatch(test, span, "No item matched: <" +
-				new Attribute("attr1", 1) + 
-				"> in " + 
-				StringUtils.print(span));
 	}
 	
 	
 	@Test
-	public void failsIfElementHasAttributes() throws IOException {
-		Matcher<DomNode> test = hasAttributes();
+	public void mismatchIfElementHasAttributes() throws IOException {
 		HtmlElement span = TestUtils.createDomNode("<span attr1='1'>text</span>");
-		
+		Matcher<DomNode> test = hasAttributes();
 		assertThat(test.matches(span), equalTo(false));
-		TestUtils.assertDescribeTo(test, "DomNode with attributes: <an empty collection>");
-		TestUtils.assertDescribeMismatch(test, span, "<[" +
-				new Attribute("attr1", 1) + 
-				"]> found in " + 
-				StringUtils.print(span));
-		
 	}
 	
+	
+	@Test
+	public void verifyDescription() {
+		Matcher<DomNode> test = hasAttributes(new Attribute("attr1", 1));
+		TestUtils.assertDescribeTo(test, "All of:\n*Has 1 attribute\n*Has attributex");
+	}
 	
 	
 }

@@ -4,12 +4,24 @@ import java.util.List;
 
 import org.hamcrest.Description;
 
+import com.gargoylesoftware.htmlunit.html.DomNode;
 import com.moonillusions.htmlUnitMatchers.StringUtils;
 
 public abstract class MyCombiningTypeSafeMatcher<T> extends MyTypeSafeMatcher<T>{
 
 	private MatcherPair failedMatcher;
 	private List<MatcherPair> matchers;
+	
+	@Override
+	public void describe(Description desc) {
+		desc.appendText("Matches all:");
+		
+	}
+	
+	@Override
+	protected void mismatch(T item, Description mismatchDescription) {
+		mismatchDescription.appendText("Failed on matcher: ");
+	}
 	
 	@Override
 	protected void describeMismatchSafely(T item, Description mismatchDescription) {
