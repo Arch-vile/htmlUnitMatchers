@@ -27,7 +27,7 @@ public abstract class MyCombiningTypeSafeMatcher<T> extends MyTypeSafeMatcher<T>
 	@Override
 	protected void describeMismatchSafely(T item, Description mismatchDescription) {
 		super.describeMismatchSafely(item, mismatchDescription);
-		this.failedMatcher.getMatcher().describeMismatchSafely(this.failedMatcher.getExtractor().extract(item), mismatchDescription, 1);
+		this.failedMatcher.getMatcher().describeMismatchSafely(this.failedMatcher.getMatchable(item), mismatchDescription, 1);
 	}
 	
 	@Override
@@ -40,7 +40,6 @@ public abstract class MyCombiningTypeSafeMatcher<T> extends MyTypeSafeMatcher<T>
 	
 	@Override
 	protected boolean match(T arg0) {
-		//this.matchers = createMatcherPairs(arg0);
 		for(MatcherPair pair : this.matchers) {
 			if(!pair.isMatch(arg0)) {
 				this.failedMatcher = pair;
@@ -54,7 +53,5 @@ public abstract class MyCombiningTypeSafeMatcher<T> extends MyTypeSafeMatcher<T>
 	protected void addMatcher(MatcherPair pair) {
 		this.matchers.add(pair);
 	}
-	
-	//protected abstract List<MatcherPair> createMatcherPairs(T arg0);
 	
 }

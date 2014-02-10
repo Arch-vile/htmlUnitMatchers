@@ -24,6 +24,9 @@ public class MatcherPair {
 	public MatchableExtractor getExtractor() {
 		return extractor;
 	}
+	public Object getMatchable(Object from) {
+		return this.extractor.extract(from);
+	}
 	
 	
 	

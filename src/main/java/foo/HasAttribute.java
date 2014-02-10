@@ -1,6 +1,8 @@
 package foo;
 
 import org.hamcrest.Description;
+import org.hamcrest.Factory;
+import org.w3c.dom.Attr;
 import org.w3c.dom.Node;
 
 import com.gargoylesoftware.htmlunit.html.DomNode;
@@ -54,6 +56,11 @@ public class HasAttribute extends MyTypeSafeMatcher<DomNode> {
 
 	private boolean matchesValue(Node node) {
 		return node.getNodeValue().equals(this.attribute.getValue());
+	}
+	
+	@Factory
+	public static HasAttribute hasAttribute(Attribute attribute, int index){
+		return new HasAttribute(attribute, index);
 	}
 
 	

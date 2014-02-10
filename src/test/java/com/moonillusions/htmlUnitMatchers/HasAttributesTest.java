@@ -106,7 +106,9 @@ public class HasAttributesTest {
 	@Test
 	public void verifyDescription() {
 		Matcher<DomNode> test = hasAttributes(new Attribute("attr1", 1));
-		TestUtils.assertDescribeTo(test, "All of:\n*Has 1 attribute\n*Has attributex");
+		TestUtils.assertDescribeTo(test, "Matches all:"
+				+ "\n*Has 1 attribute"
+				+ "\n*Has attributex");
 	}
 	
 	
