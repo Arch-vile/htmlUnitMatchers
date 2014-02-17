@@ -10,8 +10,8 @@ import com.moonillusions.htmlUnitMatchers.StringUtils;
 
 public abstract class MyCombiningTypeSafeMatcher<T> extends MyTypeSafeMatcher<T>{
 
-	private MatcherPair failedMatcher;
-	private List<MatcherPair> matchers = new ArrayList<MatcherPair>();
+	private MatcherPair<?,T> failedMatcher;
+	private List<MatcherPair<?,T>> matchers = new ArrayList<MatcherPair<?,T>>();
 	
 	@Override
 	public void describe(Description desc) {
@@ -21,13 +21,21 @@ public abstract class MyCombiningTypeSafeMatcher<T> extends MyTypeSafeMatcher<T>
 	
 	@Override
 	protected void mismatch(T item, Description mismatchDescription) {
-		mismatchDescription.appendText("Failed on matcher: ");
+		mismatchDescription.appendText("Failed on:");
 	}
 	
 	@Override
 	protected void describeMismatchSafely(T item, Description mismatchDescription) {
 		super.describeMismatchSafely(item, mismatchDescription);
-		this.failedMatcher.getMatcher().describeMismatchSafely(this.failedMatcher.getMatchable(item), mismatchDescription, 1);
+		
+		//Object matchable = this.failedMatcher.getMatchable(item);
+		
+		this.failedMatcher.proxyDescribeMismatchSafely(item,mismatchDescription,1);
+		
+//		this.failedMatcher.getMatcher().describeMismatchSafely(
+//				matchable,
+//				mismatchDescription, 
+//				1);
 	}
 	
 	@Override

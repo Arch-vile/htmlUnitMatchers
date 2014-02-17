@@ -55,9 +55,6 @@ public class HasAttributesTest {
 	}
 	
 	
-	
-	
-	
 	@Test
 	public void mismatchIfAttributesInWrongOrder() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
 		HtmlElement span = TestUtils.createDomNode("<span attr1='1' attr2='2'>text</span>");
@@ -112,18 +109,33 @@ public class HasAttributesTest {
 	}
 	
 	@Test
-	public void verifyMismatchDescriptionAttributeCount() {
-		
+	public void verifyMismatchDescriptionAttributeCount() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
+		HtmlElement span = TestUtils.createDomNode("<span attr1='1'>text</span>");
+		Matcher<DomNode> test = hasAttributes(TestUtils.createAttribute("attr1", 1), TestUtils.createAttribute("attr2",2));
+		test.matches(span);
+		TestUtils.assertDescribeMismatch(test, span, 
+				"Failed on:"
+				+ "\n*HtmlSpan[<span attr1=1>text</span>] has 1 attributes instead of the expected 2");
 	}
 
 	@Test
-	public void verifyMismatchDescriptionAttributeValue() {
-		
+	public void verifyMismatchDescriptionAttributeValue() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
+		HtmlElement span = TestUtils.createDomNode("<span attr1='1'>text</span>");
+		Matcher<DomNode> test = hasAttributes(TestUtils.createAttribute("attr1", "one"));
+		test.matches(span);
+		TestUtils.assertDescribeMismatch(test, span, 
+				"Failed on:"
+				+ "\n*On HtmlSpan[<span attr1=\"1\">] on attribute DomAttr[name=attr1 value=1] did not match expected value=one");
 	}
 	
 	@Test
-	public void verifyMismatchDescriptionAttributeName() {
-		
+	public void verifyMismatchDescriptionAttributeName() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
+		HtmlElement span = TestUtils.createDomNode("<span attr='1'>text</span>");
+		Matcher<DomNode> test = hasAttributes(TestUtils.createAttribute("count", "1"));
+		test.matches(span);
+		TestUtils.assertDescribeMismatch(test, span, 
+				"Failed on:"
+				+ "\n*On HtmlSpan[<span attr=\"1\">] on attribute DomAttr[name=attr value=1] did not match expected name=count");
 	}
 	
 }

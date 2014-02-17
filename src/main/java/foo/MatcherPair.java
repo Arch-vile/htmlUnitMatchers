@@ -1,5 +1,7 @@
 package foo;
 
+import org.hamcrest.Description;
+
 public class MatcherPair<T,F> {
 	private MyTypeSafeMatcher<T> matcher;
 	private MatchableExtractor<T,F> extractor;
@@ -21,8 +23,15 @@ public class MatcherPair<T,F> {
 	public MatchableExtractor<T,F> getExtractor() {
 		return extractor;
 	}
-	public Object getMatchable(F from) {
+	public T getMatchable(F from) {
 		return this.extractor.extract(from);
+	}
+	
+	public void proxyDescribeMismatchSafely(F from,
+			Description mismatchDescription, int i) {
+		getMatcher().describeMismatchSafely(getMatchable(from),
+				mismatchDescription, i);
+
 	}
 	
 	
