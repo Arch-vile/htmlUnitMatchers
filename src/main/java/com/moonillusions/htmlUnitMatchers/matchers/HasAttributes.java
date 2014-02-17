@@ -1,14 +1,17 @@
-package foo;
+package com.moonillusions.htmlUnitMatchers.matchers;
 
 
 import org.hamcrest.Factory;
 
 import com.gargoylesoftware.htmlunit.html.DomAttr;
 import com.gargoylesoftware.htmlunit.html.DomNode;
+import com.moonillusions.htmlUnitMatchers.core.MatchableExtractor;
+import com.moonillusions.htmlUnitMatchers.core.MatcherPair;
+import com.moonillusions.htmlUnitMatchers.core.MatcherCollection;
 
-import static foo.HasAttribute.hasAttribute;
+import static com.moonillusions.htmlUnitMatchers.matchers.HasAttribute.hasAttribute;
 
-public class HasAttributes extends MyCombiningTypeSafeMatcher<DomNode> {
+public class HasAttributes extends MatcherCollection<DomNode> {
 
 	public HasAttributes(DomAttr... attributes) {
 		addMatcher(new MatcherPair<DomNode, DomNode>(

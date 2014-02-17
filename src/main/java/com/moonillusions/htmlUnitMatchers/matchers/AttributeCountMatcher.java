@@ -1,12 +1,13 @@
-package foo;
+package com.moonillusions.htmlUnitMatchers.matchers;
 
 import org.hamcrest.Description;
 import org.hamcrest.Factory;
 
 import com.gargoylesoftware.htmlunit.html.DomNode;
-import com.moonillusions.htmlUnitMatchers.StringUtils;
+import com.moonillusions.htmlUnitMatchers.core.ElementMatcher;
+import com.moonillusions.htmlUnitMatchers.utils.StringUtils;
 
-public class AttributeCountMatcher extends MyTypeSafeMatcher<DomNode> {
+public class AttributeCountMatcher extends ElementMatcher<DomNode> {
 	
 	private int count;
 
@@ -25,7 +26,6 @@ public class AttributeCountMatcher extends MyTypeSafeMatcher<DomNode> {
 
 	@Override
 	protected boolean match(DomNode item) {
-		// TODO Auto-generated method stub
 		return attributeCount(item) == this.count;
 	}
 
@@ -39,12 +39,9 @@ public class AttributeCountMatcher extends MyTypeSafeMatcher<DomNode> {
 		
 	}
 	
-	
 	@Factory
 	public static AttributeCountMatcher hasAttributes(int count) {
 	    return new AttributeCountMatcher(count);
 	}
-
-	
 
 }

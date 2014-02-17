@@ -1,4 +1,4 @@
-package com.moonillusions.htmlUnitMatchers;
+package com.moonillusions.htmlUnitMatchers.utils;
 
 import com.gargoylesoftware.htmlunit.html.DomNode;
 

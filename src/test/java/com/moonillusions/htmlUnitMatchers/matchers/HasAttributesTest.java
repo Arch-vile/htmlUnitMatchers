@@ -1,4 +1,4 @@
-package com.moonillusions.htmlUnitMatchers;
+package com.moonillusions.htmlUnitMatchers.matchers;
 
 
 import java.io.IOException;
@@ -11,8 +11,9 @@ import org.junit.Test;
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.html.DomNode;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
+import com.moonillusions.htmlUnitMatchers.TestUtils;
 
-import static foo.HasAttributes.hasAttributes;
+import static com.moonillusions.htmlUnitMatchers.matchers.HasAttributes.hasAttributes;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 

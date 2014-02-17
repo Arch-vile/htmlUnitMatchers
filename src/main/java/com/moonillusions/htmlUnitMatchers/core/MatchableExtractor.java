@@ -1,4 +1,4 @@
-package foo;
+package com.moonillusions.htmlUnitMatchers.core;
 
 public class MatchableExtractor<M,F> {
 	

@@ -1,15 +1,14 @@
-package foo;
+package com.moonillusions.htmlUnitMatchers.matchers;
 
 import org.hamcrest.Description;
 import org.hamcrest.Factory;
-import org.w3c.dom.Attr;
 import org.w3c.dom.Node;
 
 import com.gargoylesoftware.htmlunit.html.DomAttr;
 import com.gargoylesoftware.htmlunit.html.DomNode;
-import com.moonillusions.htmlUnitMatchers.Attribute;
+import com.moonillusions.htmlUnitMatchers.core.ElementMatcher;
 
-public class HasAttribute extends MyTypeSafeMatcher<DomNode> {
+public class HasAttribute extends ElementMatcher<DomNode> {
 
 	private DomAttr attribute;
 	private int index;

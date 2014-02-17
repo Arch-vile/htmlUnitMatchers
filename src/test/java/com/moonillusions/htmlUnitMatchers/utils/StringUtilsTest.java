@@ -1,4 +1,4 @@
-package com.moonillusions.htmlUnitMatchers;
+package com.moonillusions.htmlUnitMatchers.utils;
 
 import java.io.IOException;
 
@@ -12,6 +12,8 @@ import org.junit.Test;
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.html.HtmlSelect;
 import com.gargoylesoftware.htmlunit.html.HtmlSpan;
+import com.moonillusions.htmlUnitMatchers.TestUtils;
+import com.moonillusions.htmlUnitMatchers.utils.StringUtils;
 
 import static org.junit.Assert.*;
 

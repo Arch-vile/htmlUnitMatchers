@@ -1,14 +1,11 @@
-package foo;
+package com.moonillusions.htmlUnitMatchers.core;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.hamcrest.Description;
 
-import com.gargoylesoftware.htmlunit.html.DomNode;
-import com.moonillusions.htmlUnitMatchers.StringUtils;
-
-public abstract class MyCombiningTypeSafeMatcher<T> extends MyTypeSafeMatcher<T>{
+public abstract class MatcherCollection<T> extends ElementMatcher<T>{
 
 	private MatcherPair<?,T> failedMatcher;
 	private List<MatcherPair<?,T>> matchers = new ArrayList<MatcherPair<?,T>>();
@@ -27,28 +24,20 @@ public abstract class MyCombiningTypeSafeMatcher<T> extends MyTypeSafeMatcher<T>
 	@Override
 	protected void describeMismatchSafely(T item, Description mismatchDescription) {
 		super.describeMismatchSafely(item, mismatchDescription);
-		
-		//Object matchable = this.failedMatcher.getMatchable(item);
-		
 		this.failedMatcher.proxyDescribeMismatchSafely(item,mismatchDescription,1);
-		
-//		this.failedMatcher.getMatcher().describeMismatchSafely(
-//				matchable,
-//				mismatchDescription, 
-//				1);
 	}
 	
 	@Override
 	public void describeTo(Description arg0) {
 		super.describeTo(arg0);
-		for(MatcherPair pair : this.matchers) {
+		for(MatcherPair<?,T> pair : this.matchers) {
 			pair.getMatcher().describeTo(arg0,1);
 		}
 	}
 	
 	@Override
 	protected boolean match(T arg0) {
-		for(MatcherPair pair : this.matchers) {
+		for(MatcherPair<?,T> pair : this.matchers) {
 			if(!pair.isMatch(arg0)) {
 				this.failedMatcher = pair;
 				return false;
@@ -58,7 +47,7 @@ public abstract class MyCombiningTypeSafeMatcher<T> extends MyTypeSafeMatcher<T>
 		return true;
 	}
 	
-	protected void addMatcher(MatcherPair pair) {
+	protected void addMatcher(MatcherPair<?,T> pair) {
 		this.matchers.add(pair);
 	}
 	

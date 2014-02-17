@@ -1,4 +1,4 @@
-package foo;
+package com.moonillusions.htmlUnitMatchers.utils;
 
 import org.hamcrest.Description;
 import org.hamcrest.SelfDescribing;

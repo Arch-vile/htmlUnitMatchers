@@ -1,19 +1,19 @@
-package foo;
+package com.moonillusions.htmlUnitMatchers.core;
 
 import org.hamcrest.Description;
 
 public class MatcherPair<T,F> {
-	private MyTypeSafeMatcher<T> matcher;
+	private ElementMatcher<T> matcher;
 	private MatchableExtractor<T,F> extractor;
 	
-	public MatcherPair(MyTypeSafeMatcher<T> matcher, MatchableExtractor<T,F> extractor) {
+	public MatcherPair(ElementMatcher<T> matcher, MatchableExtractor<T,F> extractor) {
 		this.matcher = matcher;
 		this.extractor = extractor;
 	}
-	public MyTypeSafeMatcher<T> getMatcher() {
+	public ElementMatcher<T> getMatcher() {
 		return matcher;
 	}
-	public void setMatcher(MyTypeSafeMatcher<T> matcher) {
+	public void setMatcher(ElementMatcher<T> matcher) {
 		this.matcher = matcher;
 	}
 

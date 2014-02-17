@@ -1,12 +1,12 @@
-package foo;
+package com.moonillusions.htmlUnitMatchers.core;
 
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 import org.w3c.dom.Node;
 
-import com.moonillusions.htmlUnitMatchers.StringUtils;
+import com.moonillusions.htmlUnitMatchers.utils.StringUtils;
 
-public abstract class MyTypeSafeMatcher<T> extends TypeSafeMatcher<T> {
+public abstract class ElementMatcher<T> extends TypeSafeMatcher<T> {
 	
 	public void describeTo(Description arg0) {
 		this.describe(arg0);
