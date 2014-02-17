@@ -1,21 +1,23 @@
 package com.moonillusions.htmlUnitMatchers;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.w3c.dom.Attr;
+import org.w3c.dom.DOMException;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.TypeInfo;
+import org.w3c.dom.UserDataHandler;
 
-public class Attribute {
+public class Attribute implements Attr {
 
-	private String name;
 	private String value;
+	private String name;
 	
 	public Attribute(String name, String value) {
 		this.name = name;
 		this.value = value;
-	}
-
-	public Attribute(Node item) {
-		this.name = item.getNodeName();
-		this.value = item.getNodeValue();
 	}
 	
 	public Attribute(String name, Object value) {
@@ -23,38 +25,221 @@ public class Attribute {
 		this.value = value.toString();
 	}
 
-	public String getName() {
-		return name;
+	public Node appendChild(Node newChild) throws DOMException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public Node cloneNode(boolean deep) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public short compareDocumentPosition(Node other) throws DOMException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public NamedNodeMap getAttributes() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public String getBaseURI() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public NodeList getChildNodes() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Object getFeature(String feature, String version) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Node getFirstChild() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Node getLastChild() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public String getLocalName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public String getNamespaceURI() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Node getNextSibling() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public String getNodeName() {
+		return this.name;
+	}
+
+	public short getNodeType() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public String getNodeValue() throws DOMException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Document getOwnerDocument() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Node getParentNode() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public String getPrefix() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Node getPreviousSibling() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public String getTextContent() throws DOMException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Object getUserData(String key) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public boolean hasAttributes() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean hasChildNodes() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public Node insertBefore(Node newChild, Node refChild) throws DOMException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public boolean isDefaultNamespace(String namespaceURI) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean isEqualNode(Node arg) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean isSameNode(Node other) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean isSupported(String feature, String version) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public String lookupNamespaceURI(String prefix) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public String lookupPrefix(String namespaceURI) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void normalize() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public Node removeChild(Node oldChild) throws DOMException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Node replaceChild(Node newChild, Node oldChild) throws DOMException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void setNodeValue(String nodeValue) throws DOMException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void setPrefix(String prefix) throws DOMException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void setTextContent(String textContent) throws DOMException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public Object setUserData(String key, Object data, UserDataHandler handler) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public String getName() {
+		return this.name;
+	}
+
+	public Element getOwnerElement() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public TypeInfo getSchemaTypeInfo() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public boolean getSpecified() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 	public String getValue() {
-		return value;
+		return this.value;
 	}
 
-	public void setValue(String value) {
-		this.value = value;
+	public boolean isId() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
-	@Override
-	public String toString() {
-		return "Attribute[name=" + this.name + " value=" + this.value + "]";
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		if(!(obj instanceof Attribute)) {
-			return false;
-		}
+	public void setValue(String value) throws DOMException {
 		
-		Attribute compareTo = (Attribute)obj;
-		return new EqualsBuilder()
-				.append(value, compareTo.value)
-				.append(name, compareTo.name)
-				.isEquals();
 	}
+
 
 }

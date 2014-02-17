@@ -3,14 +3,14 @@ package foo;
 
 import org.hamcrest.Factory;
 
+import com.gargoylesoftware.htmlunit.html.DomAttr;
 import com.gargoylesoftware.htmlunit.html.DomNode;
-import com.moonillusions.htmlUnitMatchers.Attribute;
 
 import static foo.HasAttribute.hasAttribute;
 
 public class HasAttributes extends MyCombiningTypeSafeMatcher<DomNode> {
 
-	public HasAttributes(Attribute... attributes) {
+	public HasAttributes(DomAttr... attributes) {
 		addMatcher(new MatcherPair(
 				AttributeCountMatcher.hasAttributes(attributes.length),
 				new MatchableExtractor<DomNode, DomNode>()));
@@ -23,7 +23,7 @@ public class HasAttributes extends MyCombiningTypeSafeMatcher<DomNode> {
 	}
 	
 	@Factory
-	public static HasAttributes hasAttributes(Attribute...attr) {
+	public static HasAttributes hasAttributes(DomAttr...attr) {
 	    return new HasAttributes(attr);
 	}
 }

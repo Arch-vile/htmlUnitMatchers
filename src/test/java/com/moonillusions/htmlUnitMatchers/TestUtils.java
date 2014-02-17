@@ -10,6 +10,7 @@ import org.hamcrest.StringDescription;
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.MockWebConnection;
 import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.DomAttr;
 import com.gargoylesoftware.htmlunit.html.DomElement;
 import com.gargoylesoftware.htmlunit.html.DomNode;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
@@ -29,6 +30,14 @@ public final class TestUtils {
         
         HtmlPage page = client.getPage("http://localhost");
         return (HtmlElement) page.getBody().getFirstChild();
+	}
+	
+	public static DomAttr createAttribute(String name, String value) {
+		return new DomAttr(null, null, name, value, false);
+	}
+	
+	public static DomAttr createAttribute(String name, Object value) {
+		return createAttribute(name, value.toString());
 	}
 	
 	public static void assertDescribeTo(Matcher matcher, String description) {

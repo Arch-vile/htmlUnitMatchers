@@ -5,18 +5,19 @@ import org.hamcrest.Factory;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Node;
 
+import com.gargoylesoftware.htmlunit.html.DomAttr;
 import com.gargoylesoftware.htmlunit.html.DomNode;
 import com.moonillusions.htmlUnitMatchers.Attribute;
 
 public class HasAttribute extends MyTypeSafeMatcher<DomNode> {
 
-	private Attribute attribute;
+	private DomAttr attribute;
 	private int index;
 	private Node failedAttribute;
 	
 	private String failReason;
 	
-	public HasAttribute(Attribute attribute, int index) {
+	public HasAttribute(DomAttr attribute, int index) {
 		this.attribute = attribute;
 		this.index = index;
 	}
@@ -59,7 +60,7 @@ public class HasAttribute extends MyTypeSafeMatcher<DomNode> {
 	}
 	
 	@Factory
-	public static HasAttribute hasAttribute(Attribute attribute, int index){
+	public static HasAttribute hasAttribute(DomAttr attribute, int index){
 		return new HasAttribute(attribute, index);
 	}
 
