@@ -1,30 +1,27 @@
 package foo;
 
-import org.hamcrest.TypeSafeMatcher;
-import org.w3c.dom.Node;
-
-public class MatcherPair {
-	private MyTypeSafeMatcher matcher;
-	private MatchableExtractor extractor;
+public class MatcherPair<T,F> {
+	private MyTypeSafeMatcher<T> matcher;
+	private MatchableExtractor<T,F> extractor;
 	
-	public MatcherPair(MyTypeSafeMatcher matcher, MatchableExtractor extractor) {
+	public MatcherPair(MyTypeSafeMatcher<T> matcher, MatchableExtractor<T,F> extractor) {
 		this.matcher = matcher;
 		this.extractor = extractor;
 	}
-	public MyTypeSafeMatcher getMatcher() {
+	public MyTypeSafeMatcher<T> getMatcher() {
 		return matcher;
 	}
-	public void setMatcher(MyTypeSafeMatcher matcher) {
+	public void setMatcher(MyTypeSafeMatcher<T> matcher) {
 		this.matcher = matcher;
 	}
 
-	public boolean isMatch(Object from) {
+	public boolean isMatch(F from) {
 		return this.matcher.matches(extractor.extract(from));
 	}
-	public MatchableExtractor getExtractor() {
+	public MatchableExtractor<T,F> getExtractor() {
 		return extractor;
 	}
-	public Object getMatchable(Object from) {
+	public Object getMatchable(F from) {
 		return this.extractor.extract(from);
 	}
 	

@@ -1,6 +1,6 @@
 package foo;
 
-public class MatchableExtractor<T,S> {
+public class MatchableExtractor<M,F> {
 	
 	protected int index;
 	
@@ -11,8 +11,8 @@ public class MatchableExtractor<T,S> {
 		this.index = index;
 	}
 
-	public T extract(S from) {
-		return (T) from;
+	public M extract(F from) {
+		return (M) from;
 	}
 	
 }

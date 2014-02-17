@@ -17,7 +17,9 @@ public class HasAttributes extends MyCombiningTypeSafeMatcher<DomNode> {
 
 		for (int i = 0; i < attributes.length; i++) {
 			HasAttribute hasAttr = hasAttribute(attributes[i], i);
-			MatcherPair matcherPair = new MatcherPair(hasAttr,new MatchableExtractor<DomNode, DomNode>());
+			MatcherPair matcherPair = new MatcherPair(
+					hasAttr,
+					new MatchableExtractor<DomNode, DomNode>());
 			addMatcher(matcherPair);
 		}
 	}
