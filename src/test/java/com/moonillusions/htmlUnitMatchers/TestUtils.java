@@ -48,6 +48,7 @@ public final class TestUtils {
 	}
 	
 	public static void assertDescribeMismatch(Matcher matcher, Object value, String description) {
+		assertThat(matcher.matches(value), equalTo(false));
 		Description desc = new StringDescription();
 		matcher.describeMismatch(value, desc);
 		assertThat(desc.toString(),

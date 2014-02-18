@@ -27,7 +27,7 @@ public class HasAttributesTest {
 	}
 
 	@Test
-	public void matches() throws IOException {
+	public void matchesWithAttributes() throws IOException {
         assertThat(TestUtils
         		.createDomNode("<span attr1='1' attr2='2'>text</span>"), 
         		hasAttributes(TestUtils.createAttribute("attr1", 1), TestUtils.createAttribute("attr2",2)));
@@ -40,21 +40,6 @@ public class HasAttributesTest {
         		.createDomNode("<span>text</span>"), 
         		hasAttributes());
 	}
-	
-	@Test
-	public void matchesNoValueAttributes() throws IOException {
-        assertThat(TestUtils
-        		.createDomNode("<span novalue>text</span>"), 
-        		hasAttributes(TestUtils.createAttribute("novalue", "")));
-	}
-	
-	@Test
-	public void matchesDuplicateAttributes() throws IOException {
-        assertThat(TestUtils
-        		.createDomNode("<span attr1='1' attr1='2'>text</span>"), 
-        		hasAttributes(TestUtils.createAttribute("attr1", "1")));
-	}
-	
 	
 	@Test
 	public void mismatchIfAttributesInWrongOrder() throws FailingHttpStatusCodeException, MalformedURLException, IOException {

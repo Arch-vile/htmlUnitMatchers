@@ -28,13 +28,20 @@ public class HasAttribute extends ElementMatcher<DomNode> {
 	
 	@Override
 	protected void mismatch(DomNode item, Description mismatchDescription) {
-		mismatchDescription.appendText("On " + item + " on attribute " + failedAttribute + " did not match expected " + this.failReason );
+		if(failedAttribute != null) {
+			mismatchDescription.appendText(String.format("On %s on attribute %s did not match expected %s",item,this.failedAttribute,this.failReason));
+		} else {
+			mismatchDescription.appendText(String.format("On %s did not have attribute on index %s", item, this.index));
+		}
 	}
 	
 	@Override
 	protected boolean match(DomNode element) {
 		
 		Node attr = element.getAttributes().item(this.index);
+		if(attr == null) {
+			return false;
+		}
 		
 		if(!matchesName(attr)) {
 			this.failReason = "name=" + this.attribute.getName();
