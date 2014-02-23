@@ -1,5 +1,7 @@
 package com.moonillusions.htmlUnitMatchers.matchers;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hamcrest.Description;
 import org.hamcrest.Factory;
 import org.w3c.dom.Node;
@@ -12,10 +14,7 @@ public class HasAttribute extends ElementMatcher<DomNode> {
 
 	private DomAttr attribute;
 	private int index;
-	private Node failedAttribute;
-	
-	private String failReason;
-	
+
 	public HasAttribute(DomAttr attribute, int index) {
 		this.attribute = attribute;
 		this.index = index;
@@ -23,38 +22,39 @@ public class HasAttribute extends ElementMatcher<DomNode> {
 
 	@Override
 	protected void describe(Description arg0) {
-		arg0.appendText("Has attribute on index " + this.index + ": " + attribute);
+		arg0.appendText("Has attribute on index " + this.index + ": "
+				+ attribute);
 	}
-	
+
 	@Override
 	protected void mismatch(DomNode item, Description mismatchDescription) {
-		if(failedAttribute != null) {
-			mismatchDescription.appendText(String.format("On %s on attribute %s did not match expected %s",item,this.failedAttribute,this.failReason));
-		} else {
-			mismatchDescription.appendText(String.format("On %s did not have attribute on index %s", item, this.index));
-		}
+		mismatchDescription.appendText(this.matches(item));
 	}
-	
+
 	@Override
 	protected boolean match(DomNode element) {
-		
-		Node attr = element.getAttributes().item(this.index);
-		if(attr == null) {
-			return false;
+		return matches(element) == null;
+	}
+
+	private String matches(DomNode element) {
+		DomAttr attr = (DomAttr) element.getAttributes().item(this.index);
+		if (attr == null) {
+			return String.format("On %s did not have attribute on index %s",
+					element, this.index);
 		}
-		
-		if(!matchesName(attr)) {
-			this.failReason = "name=" + this.attribute.getName();
-			this.failedAttribute = attr;
-			return false;
+
+		if (!matchesName(attr)) {
+			return String.format(
+					"On %s on attribute %s did not match expected name=%s",
+					element, attr, this.attribute.getName());
 		}
-		
-		if(!matchesValue(attr)) {
-			this.failReason = "value=" + this.attribute.getValue();
-			this.failedAttribute = attr;
-			return false;
+
+		if (!matchesValue(attr)) {
+			return String.format(
+					"On %s on attribute %s did not match expected value=%s",
+					element, attr, this.attribute.getValue());
 		}
-		return true;
+		return null;
 	}
 
 	private boolean matchesName(Node node) {
@@ -64,12 +64,40 @@ public class HasAttribute extends ElementMatcher<DomNode> {
 	private boolean matchesValue(Node node) {
 		return node.getNodeValue().equals(this.attribute.getValue());
 	}
-	
+
+	public int getIndex() {
+		return index;
+	}
+
 	@Factory
-	public static HasAttribute hasAttribute(DomAttr attribute, int index){
+	public static HasAttribute hasAttribute(DomAttr attribute, int index) {
 		return new HasAttribute(attribute, index);
 	}
 
-	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != getClass()) {
+			return false;
+		}
+		HasAttribute rhs = (HasAttribute) obj;
+		return new EqualsBuilder().append(this.index, rhs.index)
+				.append(this.attribute.getValue(), rhs.attribute.getValue())
+				.append(this.attribute.getName(), rhs.attribute.getName())
+				.isEquals();
+
+	}
+
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder(17, 37).append(index)
+				.append(attribute.getName()).append(attribute.getValue())
+				.toHashCode();
+	}
 
 }

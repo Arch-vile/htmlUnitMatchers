@@ -7,7 +7,6 @@ import com.gargoylesoftware.htmlunit.html.DomAttr;
 import com.gargoylesoftware.htmlunit.html.DomNode;
 import com.moonillusions.htmlUnitMatchers.core.MatchableExtractor;
 import com.moonillusions.htmlUnitMatchers.core.MatcherPair;
-import com.moonillusions.htmlUnitMatchers.core.MatcherCollection;
 
 import static com.moonillusions.htmlUnitMatchers.matchers.HasAttribute.hasAttribute;
 

@@ -1,9 +1,12 @@
-package com.moonillusions.htmlUnitMatchers.core;
+package com.moonillusions.htmlUnitMatchers.matchers;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.hamcrest.Description;
+
+import com.moonillusions.htmlUnitMatchers.core.ElementMatcher;
+import com.moonillusions.htmlUnitMatchers.core.MatcherPair;
 
 public abstract class MatcherCollection<T> extends ElementMatcher<T>{
 
@@ -50,5 +53,15 @@ public abstract class MatcherCollection<T> extends ElementMatcher<T>{
 	protected void addMatcher(MatcherPair<?,T> pair) {
 		this.matchers.add(pair);
 	}
+	
+	protected MatcherPair<?, T> getFailedMatcher() {
+		return this.failedMatcher;
+	}
+
+	protected List<MatcherPair<?, T>> getMatchers() {
+		return matchers;
+	}
+	
+	
 	
 }
