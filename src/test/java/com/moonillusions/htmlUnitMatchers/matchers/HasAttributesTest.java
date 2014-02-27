@@ -18,6 +18,7 @@ import static com.moonillusions.htmlUnitMatchers.matchers.AttributeCountMatcher.
 import static com.moonillusions.htmlUnitMatchers.matchers.HasAttribute.hasAttribute;
 import static com.moonillusions.htmlUnitMatchers.matchers.HasAttributes.hasAttributes;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class HasAttributesTest {
@@ -69,28 +70,21 @@ public class HasAttributesTest {
 		assertThat(test.matches(span), equalTo(false));
 		MatcherPair<?, DomNode> attrTest = test.getFailedMatcher();
 		HasAttribute hasAttr = (HasAttribute) attrTest.getMatcher();
-		assertThat(hasAttr.getIndex(), equalTo(2));
+		assertThat(hasAttr.getIndex(), equalTo(0));
 
 	}
 
 	@Test
-	public void mismatchIfTooManyAttributes() throws IOException {
+	public void mismatchIfAttributeCountWrong() throws IOException {
 		HtmlElement span = TestUtils
 				.createDomNode("<span attr1='1' attr2='2' attr3='3'>text</span>");
-		Matcher<DomNode> test = hasAttributes(
+		HasAttributes test = hasAttributes(
 				TestUtils.createAttribute("attr1", 1),
 				TestUtils.createAttribute("attr2", 2));
 		assertThat(test.matches(span), equalTo(false));
-	}
-
-	@Test
-	public void mismatchIfTooFewAttributes() throws IOException {
-		HtmlElement span = TestUtils
-				.createDomNode("<span attr1='1'>text</span>");
-		Matcher<DomNode> test = hasAttributes(
-				TestUtils.createAttribute("attr1", 1),
-				TestUtils.createAttribute("attr2", 2));
-		assertThat(test.matches(span), equalTo(false));
+		MatcherPair<?, DomNode> countTest = test.getFailedMatcher();
+		assertThat(countTest.getMatcher(),
+				instanceOf(AttributeCountMatcher.class));
 	}
 
 	@Test
@@ -116,66 +110,6 @@ public class HasAttributesTest {
 				.createDomNode("<span attr1='1'>text</span>");
 		Matcher<DomNode> test = hasAttributes();
 		assertThat(test.matches(span), equalTo(false));
-	}
-
-	@Test
-	public void verifyDescription() {
-		Matcher<DomNode> test = hasAttributes(TestUtils.createAttribute(
-				"attr1", 1));
-		TestUtils.assertDescribeTo(test, "Matches all:" + "\n*Has 1 attributes"
-				+ "\n*Has attribute on index 0: DomAttr[name=attr1 value=1]");
-	}
-
-	@Test
-	public void verifyMismatchDescriptionAttributeCount()
-			throws FailingHttpStatusCodeException, MalformedURLException,
-			IOException {
-		HtmlElement span = TestUtils
-				.createDomNode("<span attr1='1'>text</span>");
-		Matcher<DomNode> test = hasAttributes(
-				TestUtils.createAttribute("attr1", 1),
-				TestUtils.createAttribute("attr2", 2));
-		test.matches(span);
-		TestUtils
-				.assertDescribeMismatch(
-						test,
-						span,
-						"Failed on:"
-								+ "\n*HtmlSpan[<span attr1=1>text</span>] has 1 attributes instead of the expected 2");
-	}
-
-	@Test
-	public void verifyMismatchDescriptionAttributeValue()
-			throws FailingHttpStatusCodeException, MalformedURLException,
-			IOException {
-		HtmlElement span = TestUtils
-				.createDomNode("<span attr1='1'>text</span>");
-		Matcher<DomNode> test = hasAttributes(TestUtils.createAttribute(
-				"attr1", "one"));
-		test.matches(span);
-		TestUtils
-				.assertDescribeMismatch(
-						test,
-						span,
-						"Failed on:"
-								+ "\n*On HtmlSpan[<span attr1=\"1\">] on attribute DomAttr[name=attr1 value=1] did not match expected value=one");
-	}
-
-	@Test
-	public void verifyMismatchDescriptionAttributeName()
-			throws FailingHttpStatusCodeException, MalformedURLException,
-			IOException {
-		HtmlElement span = TestUtils
-				.createDomNode("<span attr='1'>text</span>");
-		Matcher<DomNode> test = hasAttributes(TestUtils.createAttribute(
-				"count", "1"));
-		test.matches(span);
-		TestUtils
-				.assertDescribeMismatch(
-						test,
-						span,
-						"Failed on:"
-								+ "\n*On HtmlSpan[<span attr=\"1\">] on attribute DomAttr[name=attr value=1] did not match expected name=count");
 	}
 
 }
