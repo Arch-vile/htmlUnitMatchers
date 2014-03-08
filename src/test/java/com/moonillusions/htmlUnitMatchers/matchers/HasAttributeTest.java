@@ -145,6 +145,7 @@ public class HasAttributeTest {
 		HasAttribute test2 = hasAttribute(
 				TestUtils.createAttribute("attr1", "1"), 1);
 
+		assertThat(test1, equalTo(test1));
 		assertThat(test1, equalTo(test2));
 		assertThat(test1.equals(null), is(false));
 		assertThat(test1.equals(new Integer(2)), is(false));
