@@ -19,6 +19,7 @@ import static com.moonillusions.htmlUnitMatchers.matchers.HasAttribute.hasAttrib
 import static com.moonillusions.htmlUnitMatchers.matchers.HasAttributes.hasAttributes;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class HasAttributesTest {
@@ -110,6 +111,40 @@ public class HasAttributesTest {
 				.createDomNode("<span attr1='1'>text</span>");
 		Matcher<DomNode> test = hasAttributes();
 		assertThat(test.matches(span), equalTo(false));
+	}
+
+	@Test
+	public void equals() {
+		HasAttributes test1 = hasAttributes(TestUtils.createAttribute("attr1",
+				1));
+		HasAttributes test2 = hasAttributes(TestUtils.createAttribute("attr1",
+				1));
+		HasAttributes test3 = hasAttributes(TestUtils.createAttribute("attr2",
+				1));
+		HasAttributes test4 = hasAttributes(TestUtils.createAttribute("attr1",
+				2));
+		assertThat(test1, equalTo(test1));
+		assertThat(test1, equalTo(test2));
+		assertThat(test1, not(equalTo(test3)));
+		assertThat(test1, not(equalTo(test4)));
+		assertThat(test1, not(equalTo(null)));
+		assertThat(test1.equals(new Integer(2)), equalTo(false));
+	}
+
+	@Test
+	public void hash() {
+		HasAttributes test1 = hasAttributes(TestUtils.createAttribute("attr1",
+				1));
+		HasAttributes test2 = hasAttributes(TestUtils.createAttribute("attr1",
+				1));
+		HasAttributes test3 = hasAttributes(TestUtils.createAttribute("attr2",
+				1));
+		HasAttributes test4 = hasAttributes(TestUtils.createAttribute("attr1",
+				2));
+		assertThat(test1.hashCode(), equalTo(test1.hashCode()));
+		assertThat(test1.hashCode(), equalTo(test2.hashCode()));
+		assertThat(test1.hashCode(), not(equalTo(test3.hashCode())));
+		assertThat(test1.hashCode(), not(equalTo(test4.hashCode())));
 	}
 
 }

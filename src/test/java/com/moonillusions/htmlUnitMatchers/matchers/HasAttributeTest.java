@@ -14,6 +14,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.AllOf.allOf;
+import static org.hamcrest.core.Is.is;
 
 public class HasAttributeTest {
 
@@ -145,6 +146,8 @@ public class HasAttributeTest {
 				TestUtils.createAttribute("attr1", "1"), 1);
 
 		assertThat(test1, equalTo(test2));
+		assertThat(test1.equals(null), is(false));
+		assertThat(test1.equals(new Integer(2)), is(false));
 	}
 
 	@Test
@@ -174,4 +177,21 @@ public class HasAttributeTest {
 		assertThat(test1, not(equalTo(test2)));
 	}
 
+	@Test
+	public void hash() {
+		HasAttribute test1 = hasAttribute(
+				TestUtils.createAttribute("attr1", "1"), 1);
+		HasAttribute test2 = hasAttribute(
+				TestUtils.createAttribute("attr1", "1"), 1);
+		HasAttribute test3 = hasAttribute(
+				TestUtils.createAttribute("attr2", "1"), 1);
+		HasAttribute test4 = hasAttribute(
+				TestUtils.createAttribute("attr1", "2"), 1);
+		HasAttribute test5 = hasAttribute(
+				TestUtils.createAttribute("attr1", "1"), 2);
+		assertThat(test1.hashCode(), is(test2.hashCode()));
+		assertThat(test1.hashCode(), is(not(test3.hashCode())));
+		assertThat(test1.hashCode(), is(not(test4.hashCode())));
+		assertThat(test1.hashCode(), is(not(test5.hashCode())));
+	}
 }
