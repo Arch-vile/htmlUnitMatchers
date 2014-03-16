@@ -29,17 +29,15 @@ public class HasAttributesTest {
 
 	@Test
 	public void hasCorrectMatchers() {
-		HasAttributes test = hasAttributes(
-				TestUtils.createAttribute("attr2", 2),
-				TestUtils.createAttribute("attr1", 1));
+		HasAttributes test = hasAttributes("attr2=2", "attr1=1");
 		List<MatcherPair<?, DomNode>> matchers = test.getMatchers();
 		assertThat(matchers.size(), equalTo(3));
 		assertThat((AttributeCountMatcher) matchers.get(0).getMatcher(),
 				equalTo(hasAttributes(2)));
 		assertThat((HasAttribute) matchers.get(1).getMatcher(),
-				equalTo(hasAttribute(TestUtils.createAttribute("attr2", 2), 0)));
+				equalTo(hasAttribute("attr2=2", 0)));
 		assertThat((HasAttribute) matchers.get(2).getMatcher(),
-				equalTo(hasAttribute(TestUtils.createAttribute("attr1", 1), 1)));
+				equalTo(hasAttribute("attr1=1", 1)));
 	}
 
 	@Test
@@ -47,8 +45,7 @@ public class HasAttributesTest {
 		assertThat(
 				TestUtils
 						.createDomNode("<span attr1='1' attr2='2'>text</span>"),
-				hasAttributes(TestUtils.createAttribute("attr1", 1),
-						TestUtils.createAttribute("attr2", 2)));
+				hasAttributes("attr1=1", "attr2=2"));
 
 	}
 
@@ -64,9 +61,7 @@ public class HasAttributesTest {
 			IOException {
 		HtmlElement span = TestUtils
 				.createDomNode("<span attr1='1' attr2='2'>text</span>");
-		HasAttributes test = hasAttributes(
-				TestUtils.createAttribute("attr2", 2),
-				TestUtils.createAttribute("attr1", 1));
+		HasAttributes test = hasAttributes("attr2=2", "attr1=1");
 		assertThat(test.matches(span), equalTo(false));
 		MatcherPair<?, DomNode> attrTest = test.getFailedMatcher();
 		HasAttribute hasAttr = (HasAttribute) attrTest.getMatcher();
@@ -78,9 +73,7 @@ public class HasAttributesTest {
 	public void mismatchIfAttributeCountWrong() throws IOException {
 		HtmlElement span = TestUtils
 				.createDomNode("<span attr1='1' attr2='2' attr3='3'>text</span>");
-		HasAttributes test = hasAttributes(
-				TestUtils.createAttribute("attr1", 1),
-				TestUtils.createAttribute("attr2", 2));
+		HasAttributes test = hasAttributes("attr1=1", "attr2=2");
 		assertThat(test.matches(span), equalTo(false));
 		MatcherPair<?, DomNode> countTest = test.getFailedMatcher();
 		assertThat(countTest.getMatcher(),
@@ -91,16 +84,14 @@ public class HasAttributesTest {
 	public void mismatchIfAttributeValueNoMatch() throws IOException {
 		HtmlElement span = TestUtils
 				.createDomNode("<span attr1='1'>text</span>");
-		Matcher<DomNode> test = hasAttributes(TestUtils.createAttribute(
-				"attr1", "one"));
+		Matcher<DomNode> test = hasAttributes("attr1=one");
 		assertThat(test.matches(span), equalTo(false));
 	}
 
 	@Test
 	public void mismatchIfNoAttributes() throws IOException {
 		HtmlElement span = TestUtils.createDomNode("<span>text</span>");
-		Matcher<DomNode> test = hasAttributes(TestUtils.createAttribute(
-				"attr1", 1));
+		Matcher<DomNode> test = hasAttributes("attr1=1");
 		assertThat(test.matches(span), equalTo(false));
 	}
 

@@ -8,15 +8,16 @@ import org.w3c.dom.Node;
 
 import com.gargoylesoftware.htmlunit.html.DomAttr;
 import com.gargoylesoftware.htmlunit.html.DomNode;
+import com.moonillusions.htmlUnitMatchers.core.Attribute;
 import com.moonillusions.htmlUnitMatchers.core.ElementMatcher;
 
 public class HasAttribute extends ElementMatcher<DomNode> {
 
-	private DomAttr attribute;
+	private Attribute attribute;
 	private int index;
 
-	public HasAttribute(DomAttr attribute, int index) {
-		this.attribute = attribute;
+	public HasAttribute(String attribute, int index) {
+		this.attribute = new Attribute(attribute);
 		this.index = index;
 	}
 
@@ -70,7 +71,7 @@ public class HasAttribute extends ElementMatcher<DomNode> {
 	}
 
 	@Factory
-	public static HasAttribute hasAttribute(DomAttr attribute, int index) {
+	public static HasAttribute hasAttribute(String attribute, int index) {
 		return new HasAttribute(attribute, index);
 	}
 

@@ -22,7 +22,7 @@ public class HasAttributeTest {
 	public void matchesSingleAttribute() throws FailingHttpStatusCodeException,
 			MalformedURLException, IOException {
 		assertThat(TestUtils.createDomNode("<span attr1=1>text</span>"),
-				hasAttribute(TestUtils.createAttribute("attr1", "1"), 0));
+				hasAttribute("attr1=1", 0));
 	}
 
 	@Test
@@ -31,21 +31,26 @@ public class HasAttributeTest {
 			IOException {
 		assertThat(
 				TestUtils.createDomNode("<span attr1=1 attr2=2>text</span>"),
-				allOf(hasAttribute(TestUtils.createAttribute("attr1", "1"), 0),
-						hasAttribute(TestUtils.createAttribute("attr2", "2"), 1)));
+				allOf(hasAttribute("attr1=1", 0), hasAttribute("attr2=2", 1)));
 	}
 
 	@Test
 	public void matchesNoValueAttributes() throws IOException {
 		assertThat(TestUtils.createDomNode("<span novalue>text</span>"),
-				hasAttribute(TestUtils.createAttribute("novalue", ""), 0));
+				hasAttribute("novalue", 0));
+	}
+
+	@Test
+	public void matchesEmptyValueAttributes() throws IOException {
+		assertThat(TestUtils.createDomNode("<span novalue>text</span>"),
+				hasAttribute("novalue=", 0));
 	}
 
 	@Test
 	public void matchesDuplicateAttribute() throws IOException {
 		assertThat(
 				TestUtils.createDomNode("<span attr1=1 attr1=2>text</span>"),
-				hasAttribute(TestUtils.createAttribute("attr1", "1"), 0));
+				hasAttribute("attr1=1", 0));
 	}
 
 	@Test
@@ -54,8 +59,7 @@ public class HasAttributeTest {
 			IOException {
 		HtmlElement span = TestUtils
 				.createDomNode("<span attr1=1 attr2=2>text</span>");
-		HasAttribute test = hasAttribute(TestUtils.createAttribute("age", "1"),
-				0);
+		HasAttribute test = hasAttribute("age=1", 0);
 		assertThat(test.match(span), equalTo(false));
 	}
 
@@ -65,8 +69,7 @@ public class HasAttributeTest {
 			IOException {
 		HtmlElement span = TestUtils
 				.createDomNode("<span attr1=1 attr2=2>text</span>");
-		HasAttribute test = hasAttribute(
-				TestUtils.createAttribute("attr1", "some"), 0);
+		HasAttribute test = hasAttribute("attr1=some", 0);
 		assertThat(test.match(span), equalTo(false));
 	}
 
@@ -76,8 +79,7 @@ public class HasAttributeTest {
 			IOException {
 		HtmlElement span = TestUtils
 				.createDomNode("<span attr1=1 attr2=2>text</span>");
-		HasAttribute test = hasAttribute(
-				TestUtils.createAttribute("attr1", "1"), 1);
+		HasAttribute test = hasAttribute("attr1=1", 1);
 		assertThat(test.match(span), equalTo(false));
 	}
 
@@ -85,17 +87,15 @@ public class HasAttributeTest {
 	public void failsIfNoAttributes() throws FailingHttpStatusCodeException,
 			MalformedURLException, IOException {
 		HtmlElement span = TestUtils.createDomNode("<span>text</span>");
-		HasAttribute test = hasAttribute(
-				TestUtils.createAttribute("attr1", "1"), 1);
+		HasAttribute test = hasAttribute("attr1=1", 1);
 		assertThat(test.match(span), equalTo(false));
 	}
 
 	@Test
 	public void verifyDescription() {
-		HasAttribute test = hasAttribute(
-				TestUtils.createAttribute("attr1", "1"), 4);
+		HasAttribute test = hasAttribute("attr1=1", 4);
 		TestUtils.assertDescribeTo(test,
-				"Has attribute on index 4: DomAttr[name=attr1 value=1]");
+				"Has attribute on index 4: name: [attr1] value: [1]");
 	}
 
 	@Test
@@ -103,8 +103,7 @@ public class HasAttributeTest {
 			throws FailingHttpStatusCodeException, MalformedURLException,
 			IOException {
 		HtmlElement span = TestUtils.createDomNode("<span attr1=1>text</span>");
-		HasAttribute test = hasAttribute(TestUtils.createAttribute("age", "1"),
-				0);
+		HasAttribute test = hasAttribute("age=1", 0);
 		TestUtils
 				.assertDescribeMismatch(
 						test,
@@ -117,8 +116,7 @@ public class HasAttributeTest {
 			throws FailingHttpStatusCodeException, MalformedURLException,
 			IOException {
 		HtmlElement span = TestUtils.createDomNode("<span attr1=1>text</span>");
-		HasAttribute test = hasAttribute(
-				TestUtils.createAttribute("attr1", "2"), 0);
+		HasAttribute test = hasAttribute("attr1=2", 0);
 		TestUtils
 				.assertDescribeMismatch(
 						test,
@@ -131,8 +129,7 @@ public class HasAttributeTest {
 			throws FailingHttpStatusCodeException, MalformedURLException,
 			IOException {
 		HtmlElement span = TestUtils.createDomNode("<span attr1=1>text</span>");
-		HasAttribute test = hasAttribute(
-				TestUtils.createAttribute("attr1", "1"), 1);
+		HasAttribute test = hasAttribute("attr1=1", 1);
 		TestUtils
 				.assertDescribeMismatch(test, span,
 						"On HtmlSpan[<span attr1=\"1\">] did not have attribute on index 1");
@@ -140,10 +137,8 @@ public class HasAttributeTest {
 
 	@Test
 	public void equals() {
-		HasAttribute test1 = hasAttribute(
-				TestUtils.createAttribute("attr1", "1"), 1);
-		HasAttribute test2 = hasAttribute(
-				TestUtils.createAttribute("attr1", "1"), 1);
+		HasAttribute test1 = hasAttribute("attr1=1", 1);
+		HasAttribute test2 = hasAttribute("attr1=1", 1);
 
 		assertThat(test1, equalTo(test1));
 		assertThat(test1, equalTo(test2));
@@ -153,43 +148,32 @@ public class HasAttributeTest {
 
 	@Test
 	public void equalsFailsIfAttributeNameMismatch() {
-		HasAttribute test1 = hasAttribute(
-				TestUtils.createAttribute("attr1", "1"), 1);
-		HasAttribute test2 = hasAttribute(
-				TestUtils.createAttribute("attr2", "1"), 1);
+		HasAttribute test1 = hasAttribute("attr1=1", 1);
+		HasAttribute test2 = hasAttribute("attr2=1", 1);
 		assertThat(test1, not(equalTo(test2)));
 	}
 
 	@Test
 	public void equalsFailsIfAttributeValueMismatch() {
-		HasAttribute test1 = hasAttribute(
-				TestUtils.createAttribute("attr1", "1"), 1);
-		HasAttribute test2 = hasAttribute(
-				TestUtils.createAttribute("attr2", "2"), 1);
+		HasAttribute test1 = hasAttribute("attr1=1", 1);
+		HasAttribute test2 = hasAttribute("attr2=2", 1);
 		assertThat(test1, not(equalTo(test2)));
 	}
 
 	@Test
 	public void equalsFailsIfAttributeIndexMismatch() {
-		HasAttribute test1 = hasAttribute(
-				TestUtils.createAttribute("attr1", "1"), 1);
-		HasAttribute test2 = hasAttribute(
-				TestUtils.createAttribute("attr2", "2"), 2);
+		HasAttribute test1 = hasAttribute("attr1=1", 1);
+		HasAttribute test2 = hasAttribute("attr2=2", 2);
 		assertThat(test1, not(equalTo(test2)));
 	}
 
 	@Test
 	public void hash() {
-		HasAttribute test1 = hasAttribute(
-				TestUtils.createAttribute("attr1", "1"), 1);
-		HasAttribute test2 = hasAttribute(
-				TestUtils.createAttribute("attr1", "1"), 1);
-		HasAttribute test3 = hasAttribute(
-				TestUtils.createAttribute("attr2", "1"), 1);
-		HasAttribute test4 = hasAttribute(
-				TestUtils.createAttribute("attr1", "2"), 1);
-		HasAttribute test5 = hasAttribute(
-				TestUtils.createAttribute("attr1", "1"), 2);
+		HasAttribute test1 = hasAttribute("attr1=1", 1);
+		HasAttribute test2 = hasAttribute("attr1=1", 1);
+		HasAttribute test3 = hasAttribute("attr2=1", 1);
+		HasAttribute test4 = hasAttribute("attr1=2", 1);
+		HasAttribute test5 = hasAttribute("attr1=1", 2);
 		assertThat(test1.hashCode(), is(test2.hashCode()));
 		assertThat(test1.hashCode(), is(not(test3.hashCode())));
 		assertThat(test1.hashCode(), is(not(test4.hashCode())));
