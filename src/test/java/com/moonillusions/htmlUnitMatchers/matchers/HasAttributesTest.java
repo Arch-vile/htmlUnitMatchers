@@ -28,10 +28,9 @@ public class HasAttributesTest {
 	public void hasCorrectMatchers() {
 		HasAttributes test = hasAttributes("attr2=2", "attr1=1");
 		List<MatcherPair<?, DomNode>> matchers = test.getMatchers();
-		assertThat(matchers.size(), equalTo(3));
-		assertThat((HasAttribute) matchers.get(1).getMatcher(),
+		assertThat((HasAttribute) matchers.get(0).getMatcher(),
 				equalTo(hasAttribute("attr2=2")));
-		assertThat((HasAttribute) matchers.get(2).getMatcher(),
+		assertThat((HasAttribute) matchers.get(1).getMatcher(),
 				equalTo(hasAttribute("attr1=1")));
 	}
 
@@ -52,10 +51,9 @@ public class HasAttributesTest {
 
 	@Test
 	public void matchesIfElementHasExtraAttributes() throws IOException {
-		HtmlElement span = TestUtils
-				.createDomNode("<span attr1='1' attr2=2>text</span>");
-		Matcher<DomNode> test = hasAttributes("attr2=2");
-		assertThat(test.matches(span), equalTo(false));
+		assertThat(
+				TestUtils.createDomNode("<span attr1='1' attr2=2>text</span>"),
+				hasAttributes("attr2=2"));
 	}
 
 	@Test

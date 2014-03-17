@@ -11,10 +11,6 @@ import static com.moonillusions.htmlUnitMatchers.matchers.HasAttribute.hasAttrib
 public class HasAttributes extends MatcherCollection<DomNode> {
 
 	public HasAttributes(String... attributes) {
-		addMatcher(new MatcherPair<DomNode, DomNode>(
-				AttributeCountMatcher.hasAttributes(attributes.length),
-				new MatchableExtractor<DomNode, DomNode>()));
-
 		for (int i = 0; i < attributes.length; i++) {
 			HasAttribute hasAttr = hasAttribute(attributes[i]);
 			MatcherPair<DomNode, DomNode> matcherPair = new MatcherPair<DomNode, DomNode>(
