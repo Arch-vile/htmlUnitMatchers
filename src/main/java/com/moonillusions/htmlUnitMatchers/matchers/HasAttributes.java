@@ -16,7 +16,7 @@ public class HasAttributes extends MatcherCollection<DomNode> {
 				new MatchableExtractor<DomNode, DomNode>()));
 
 		for (int i = 0; i < attributes.length; i++) {
-			HasAttribute hasAttr = hasAttribute(attributes[i], i);
+			HasAttribute hasAttr = hasAttribute(attributes[i]);
 			MatcherPair<DomNode, DomNode> matcherPair = new MatcherPair<DomNode, DomNode>(
 					hasAttr, new MatchableExtractor<DomNode, DomNode>());
 			addMatcher(matcherPair);

@@ -14,17 +14,14 @@ import com.moonillusions.htmlUnitMatchers.core.ElementMatcher;
 public class HasAttribute extends ElementMatcher<DomNode> {
 
 	private Attribute attribute;
-	private int index;
 
-	public HasAttribute(String attribute, int index) {
+	public HasAttribute(String attribute) {
 		this.attribute = new Attribute(attribute);
-		this.index = index;
 	}
 
 	@Override
 	protected void describe(Description arg0) {
-		arg0.appendText("Has attribute on index " + this.index + ": "
-				+ attribute);
+		arg0.appendText(String.format("Has attribute %s", attribute));
 	}
 
 	@Override
@@ -38,41 +35,28 @@ public class HasAttribute extends ElementMatcher<DomNode> {
 	}
 
 	private String matches(DomNode element) {
-		DomAttr attr = (DomAttr) element.getAttributes().item(this.index);
+		DomAttr attr = (DomAttr) element.getAttributes().getNamedItem(
+				this.attribute.getName());
 		if (attr == null) {
-			return String.format("On %s did not have attribute on index %s",
-					element, this.index);
-		}
-
-		if (!matchesName(attr)) {
-			return String.format(
-					"On %s on attribute %s did not match expected name=%s",
-					element, attr, this.attribute.getName());
+			return String.format("On %s did not have expected attribute %s",
+					element, this.attribute);
 		}
 
 		if (!matchesValue(attr)) {
 			return String.format(
-					"On %s on attribute %s did not match expected value=%s",
+					"On %s on attribute %s did not match expected value: [%s]",
 					element, attr, this.attribute.getValue());
 		}
 		return null;
-	}
-
-	private boolean matchesName(Node node) {
-		return node.getNodeName().equals(this.attribute.getName());
 	}
 
 	private boolean matchesValue(Node node) {
 		return node.getNodeValue().equals(this.attribute.getValue());
 	}
 
-	public int getIndex() {
-		return index;
-	}
-
 	@Factory
-	public static HasAttribute hasAttribute(String attribute, int index) {
-		return new HasAttribute(attribute, index);
+	public static HasAttribute hasAttribute(String attribute) {
+		return new HasAttribute(attribute);
 	}
 
 	@Override
@@ -87,7 +71,7 @@ public class HasAttribute extends ElementMatcher<DomNode> {
 			return false;
 		}
 		HasAttribute rhs = (HasAttribute) obj;
-		return new EqualsBuilder().append(this.index, rhs.index)
+		return new EqualsBuilder()
 				.append(this.attribute.getValue(), rhs.attribute.getValue())
 				.append(this.attribute.getName(), rhs.attribute.getName())
 				.isEquals();
@@ -96,9 +80,8 @@ public class HasAttribute extends ElementMatcher<DomNode> {
 
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder(17, 37).append(index)
-				.append(attribute.getName()).append(attribute.getValue())
-				.toHashCode();
+		return new HashCodeBuilder(17, 37).append(attribute.getName())
+				.append(attribute.getValue()).toHashCode();
 	}
 
 }
