@@ -1,26 +1,30 @@
 package com.moonillusions.htmlUnitMatchers.matchers;
 
+import java.util.ArrayList;
+
 import org.hamcrest.Factory;
+import org.hamcrest.Matcher;
+import org.hamcrest.core.AllOf;
 
 import com.gargoylesoftware.htmlunit.html.DomNode;
-import com.moonillusions.htmlUnitMatchers.core.MatchableExtractor;
-import com.moonillusions.htmlUnitMatchers.core.MatcherPair;
 
 import static com.moonillusions.htmlUnitMatchers.matchers.HasAttribute.hasAttribute;
 
-public class HasAttributes extends MatcherCollection<DomNode> {
+public class HasAttributes extends AllOf<DomNode> {
 
-	public HasAttributes(String... attributes) {
-		for (int i = 0; i < attributes.length; i++) {
-			HasAttribute hasAttr = hasAttribute(attributes[i]);
-			MatcherPair<DomNode, DomNode> matcherPair = new MatcherPair<DomNode, DomNode>(
-					hasAttr, new MatchableExtractor<DomNode, DomNode>());
-			addMatcher(matcherPair);
-		}
+	public HasAttributes(Iterable<Matcher<? super DomNode>> arg0) {
+		super(arg0);
 	}
 
 	@Factory
 	public static HasAttributes hasAttributes(String... attributes) {
-		return new HasAttributes(attributes);
+		ArrayList<Matcher<? super DomNode>> matchers = new ArrayList<Matcher<? super DomNode>>();
+
+		for (int i = 0; i < attributes.length; i++) {
+			HasAttribute hasAttr = hasAttribute(attributes[i]);
+			matchers.add(hasAttr);
+		}
+
+		return new HasAttributes(matchers);
 	}
 }

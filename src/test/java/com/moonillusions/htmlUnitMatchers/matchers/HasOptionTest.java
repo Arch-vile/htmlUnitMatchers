@@ -3,7 +3,6 @@ package com.moonillusions.htmlUnitMatchers.matchers;
 import java.io.IOException;
 import java.net.MalformedURLException;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
@@ -31,7 +30,7 @@ public class HasOptionTest {
 		HtmlSelect select = (HtmlSelect) TestUtils.createDomNode("<select>"
 				+ "<option value=somevalue>some text</option>"
 				+ "<option value=myvalue>my text</option>" + "</select>");
-		assertThat(select, hasOption("my text", "myvalue", true, 1));
+		assertThat(select, hasOption("my text", "myvalue", 1));
 	}
 
 	@Test
@@ -51,6 +50,15 @@ public class HasOptionTest {
 	}
 
 	@Test
+	public void matchesSelected() throws FailingHttpStatusCodeException,
+			MalformedURLException, IOException {
+		HtmlSelect select = (HtmlSelect) TestUtils.createDomNode("<select>"
+				+ "<option value=myValue selected=selected>my text</option>"
+				+ "<option value=myValue2>my text2</option>" + "</select>");
+		assertThat(select, hasOption("my text", "myValue", true, 0));
+	}
+
+	@Test
 	public void mismatchIfWrongValue() throws FailingHttpStatusCodeException,
 			MalformedURLException, IOException {
 		HtmlSelect select = (HtmlSelect) TestUtils
@@ -67,11 +75,21 @@ public class HasOptionTest {
 	}
 
 	@Test
-	@Ignore
 	public void mismatchIfNotSelected() throws FailingHttpStatusCodeException,
 			MalformedURLException, IOException {
-		HtmlSelect select = (HtmlSelect) TestUtils
-				.createDomNode("<select><option value=myValue>my text</option></select>");
+		HtmlSelect select = (HtmlSelect) TestUtils.createDomNode("<select>"
+				+ "<option value=myValue selected=selected>my text</option>"
+				+ "<option value=myValue2>my text2</option>" + "</select>");
+
+		assertThat(select, not(hasOption("my text2", "myValue2", true, 1)));
+	}
+
+	@Test
+	public void mismatchIfSelected() throws FailingHttpStatusCodeException,
+			MalformedURLException, IOException {
+		HtmlSelect select = (HtmlSelect) TestUtils.createDomNode("<select>"
+				+ "<option value=myValue selected=selected>my text</option>"
+				+ "<option value=myValue2>my text2</option>" + "</select>");
 		assertThat(select, not(hasOption("my text", "myValue", false, 0)));
 	}
 

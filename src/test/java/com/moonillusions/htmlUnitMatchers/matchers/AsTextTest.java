@@ -56,16 +56,15 @@ public class AsTextTest {
 	@Test
 	public void describe() {
 		TestUtils.assertDescribeTo(asText("I am text"),
-				String.format("Element with text content: [%s]", "I am text"));
+				"has as text: [I am text]");
 	}
 
 	@Test
 	public void mismatchDescription() throws FailingHttpStatusCodeException,
 			MalformedURLException, IOException {
 		TestUtils
-				.assertDescribeMismatch(
-						asText("I am text"),
+				.assertDescribeMismatch(asText("I am text"),
 						TestUtils.createDomNode("<span>Some text</span>"),
-						"On HtmlSpan[<span>Some text</span>] as text [Some text] did not match the expected [I am text]");
+						"did not match [Some text] on HtmlSpan[<span>Some text</span>]");
 	}
 }

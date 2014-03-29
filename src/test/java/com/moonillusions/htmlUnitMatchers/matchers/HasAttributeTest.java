@@ -10,11 +10,9 @@ import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.moonillusions.htmlUnitMatchers.TestUtils;
 
 import static com.moonillusions.htmlUnitMatchers.matchers.HasAttribute.hasAttribute;
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.AllOf.allOf;
-import static org.hamcrest.core.Is.is;
 
 public class HasAttributeTest {
 
@@ -102,39 +100,4 @@ public class HasAttributeTest {
 						"On HtmlSpan[<span attr1=\"1\">] on attribute DomAttr[name=attr1 value=1] did not match expected value: [2]");
 	}
 
-	@Test
-	public void equals() {
-		HasAttribute test1 = hasAttribute("attr1=1");
-		HasAttribute test2 = hasAttribute("attr1=1");
-
-		assertThat(test1, equalTo(test1));
-		assertThat(test1, equalTo(test2));
-		assertThat(test1.equals(null), is(false));
-		assertThat(test1.equals(new Integer(2)), is(false));
-	}
-
-	@Test
-	public void equalsFailsIfAttributeNameMismatch() {
-		HasAttribute test1 = hasAttribute("attr1=1");
-		HasAttribute test2 = hasAttribute("attr2=1");
-		assertThat(test1, not(equalTo(test2)));
-	}
-
-	@Test
-	public void equalsFailsIfAttributeValueMismatch() {
-		HasAttribute test1 = hasAttribute("attr1=1");
-		HasAttribute test2 = hasAttribute("attr2=2");
-		assertThat(test1, not(equalTo(test2)));
-	}
-
-	@Test
-	public void hash() {
-		HasAttribute test1 = hasAttribute("attr1=1");
-		HasAttribute test2 = hasAttribute("attr1=1");
-		HasAttribute test3 = hasAttribute("attr2=1");
-		HasAttribute test4 = hasAttribute("attr1=2");
-		assertThat(test1.hashCode(), is(test2.hashCode()));
-		assertThat(test1.hashCode(), is(not(test3.hashCode())));
-		assertThat(test1.hashCode(), is(not(test4.hashCode())));
-	}
 }
