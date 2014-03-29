@@ -11,7 +11,6 @@ import com.moonillusions.htmlUnitMatchers.TestUtils;
 
 import static com.moonillusions.htmlUnitMatchers.matchers.AttributeCountMatcher.hasAttributes;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class AttributeCountMatcherTest {
@@ -81,29 +80,4 @@ public class AttributeCountMatcherTest {
 						"HtmlSpan[<span attr1=1>foo</span>] has 1 attributes instead of the expected 2");
 	}
 
-	@Test
-	public void equals() {
-		AttributeCountMatcher test1 = hasAttributes(2);
-		AttributeCountMatcher test2 = hasAttributes(2);
-		assertThat(test1, equalTo(test2));
-		assertThat(test1, equalTo(test1));
-		assertThat(test1, not(equalTo(null)));
-		assertThat(test1.equals(new Integer(2)), equalTo(false));
-	}
-
-	@Test
-	public void equalsFailsIfCountMismatch() {
-		AttributeCountMatcher test1 = hasAttributes(2);
-		AttributeCountMatcher test2 = hasAttributes(3);
-		assertThat(test1, not(equalTo(test2)));
-	}
-
-	@Test
-	public void hash() {
-		AttributeCountMatcher test1 = hasAttributes(2);
-		AttributeCountMatcher test2 = hasAttributes(2);
-		AttributeCountMatcher test3 = hasAttributes(3);
-		assertThat(test1.hashCode(), equalTo(test2.hashCode()));
-		assertThat(test3.hashCode(), not(equalTo(test2.hashCode())));
-	}
 }
