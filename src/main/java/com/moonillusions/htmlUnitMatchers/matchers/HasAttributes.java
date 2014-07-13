@@ -17,11 +17,11 @@ public class HasAttributes extends AllOf<DomNode> {
 	}
 
 	@Factory
-	public static HasAttributes hasAttributes(String... attributes) {
+	public static HasAttributes hasAttributes(String[]... attributes) {
 		ArrayList<Matcher<? super DomNode>> matchers = new ArrayList<Matcher<? super DomNode>>();
 
-		for (int i = 0; i < attributes.length; i++) {
-			HasAttribute hasAttr = hasAttribute(attributes[i]);
+		for (String[] attribute : attributes) {
+			HasAttribute hasAttr = hasAttribute(attribute[0], attribute[1]);
 			matchers.add(hasAttr);
 		}
 

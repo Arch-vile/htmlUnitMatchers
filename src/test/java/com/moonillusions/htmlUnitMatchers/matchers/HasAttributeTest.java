@@ -20,7 +20,7 @@ public class HasAttributeTest {
 	public void matchesSingleAttribute() throws FailingHttpStatusCodeException,
 			MalformedURLException, IOException {
 		assertThat(TestUtils.createDomNode("<span attr1=1>text</span>"),
-				hasAttribute("attr1=1"));
+				hasAttribute("attr1", "1"));
 	}
 
 	@Test
@@ -29,26 +29,21 @@ public class HasAttributeTest {
 			IOException {
 		assertThat(
 				TestUtils.createDomNode("<span attr1=1 attr2=2>text</span>"),
-				allOf(hasAttribute("attr1=1"), hasAttribute("attr2=2")));
+				allOf(hasAttribute("attr1", "1"), hasAttribute("attr2", "2")));
 	}
 
 	@Test
 	public void matchesNoValueAttributes() throws IOException {
 		assertThat(TestUtils.createDomNode("<span novalue>text</span>"),
-				hasAttribute("novalue"));
-	}
-
-	@Test
-	public void matchesEmptyValueAttributes() throws IOException {
-		assertThat(TestUtils.createDomNode("<span novalue>text</span>"),
-				hasAttribute("novalue="));
+				hasAttribute("novalue", ""));
 	}
 
 	@Test
 	public void matchesDuplicateAttribute() throws IOException {
 		assertThat(
 				TestUtils.createDomNode("<span attr1=1 attr1=2>text</span>"),
-				allOf(hasAttribute("attr1=1"), not(hasAttribute("attr1=2"))));
+				allOf(hasAttribute("attr1", "1"),
+						not(hasAttribute("attr1", "2"))));
 	}
 
 	@Test
@@ -57,19 +52,19 @@ public class HasAttributeTest {
 			IOException {
 		assertThat(
 				TestUtils.createDomNode("<span attr1=1 attr2=2>text</span>"),
-				not(hasAttribute("attr1=some")));
+				not(hasAttribute("attr1", "some")));
 	}
 
 	@Test
 	public void failsIfNoAttributes() throws FailingHttpStatusCodeException,
 			MalformedURLException, IOException {
 		assertThat(TestUtils.createDomNode("<span>text</span>"),
-				not(hasAttribute("attr1=1")));
+				not(hasAttribute("attr1", "1")));
 	}
 
 	@Test
 	public void verifyDescription() {
-		HasAttribute test = hasAttribute("attr1=1");
+		HasAttribute test = hasAttribute("attr1", "1");
 		TestUtils.assertDescribeTo(test,
 				"Has attribute name: [attr1] value: [1]");
 	}
@@ -79,7 +74,7 @@ public class HasAttributeTest {
 			throws FailingHttpStatusCodeException, MalformedURLException,
 			IOException {
 		HtmlElement span = TestUtils.createDomNode("<span attr1=1>text</span>");
-		HasAttribute test = hasAttribute("age=1");
+		HasAttribute test = hasAttribute("age", "1");
 		TestUtils
 				.assertDescribeMismatch(
 						test,
@@ -92,7 +87,7 @@ public class HasAttributeTest {
 			throws FailingHttpStatusCodeException, MalformedURLException,
 			IOException {
 		HtmlElement span = TestUtils.createDomNode("<span attr1=1>text</span>");
-		HasAttribute test = hasAttribute("attr1=2");
+		HasAttribute test = hasAttribute("attr1", "2");
 		TestUtils
 				.assertDescribeMismatch(
 						test,

@@ -46,18 +46,18 @@ public class HasOption extends AllOf<HtmlSelect> {
 		ArrayList<Matcher<? super HtmlSelect>> matchers = new ArrayList<Matcher<? super HtmlSelect>>();
 
 		if (StringUtils.isNotEmpty(value)) {
-			Matcher<? super HtmlSelect> e1 = hasAttribute("value=" + value,
+			Matcher<? super HtmlSelect> e1 = hasAttribute("value", value,
 					extractor);
 			matchers.add(e1);
 		}
 
 		if (isSelected) {
-			Matcher<? super HtmlSelect> e1 = hasAttribute("selected=selected",
-					extractor);
+			Matcher<? super HtmlSelect> e1 = hasAttribute("selected",
+					"selected", extractor);
 			matchers.add(e1);
 		} else {
-			Matcher<? super HtmlSelect> e1 = hasAttribute("selected=selected",
-					extractor);
+			Matcher<? super HtmlSelect> e1 = hasAttribute("selected",
+					"selected", extractor);
 			matchers.add(not(e1));
 		}
 

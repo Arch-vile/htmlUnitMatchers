@@ -37,7 +37,8 @@ public class HasAttributesTest {
 		assertThat(
 				TestUtils
 						.createDomNode("<span attr1='1' attr2='2'>text</span>"),
-				hasAttributes("attr1=1", "attr2=2"));
+				hasAttributes(new String[] { "attr1", "1" }, new String[] {
+						"attr2", "2" }));
 
 	}
 
@@ -51,14 +52,15 @@ public class HasAttributesTest {
 	public void matchesIfElementHasExtraAttributes() throws IOException {
 		assertThat(
 				TestUtils.createDomNode("<span attr1='1' attr2=2>text</span>"),
-				hasAttributes("attr2=2"));
+				hasAttributes(new String[] { "attr2", "2" }));
 	}
 
 	@Test
 	public void mismatchIfElementMissingAttributes() throws IOException {
 		HtmlElement span = TestUtils
 				.createDomNode("<span attr1='1' attr2=2>text</span>");
-		Matcher<DomNode> test = hasAttributes("attr2=2", "attr1=1", "attr3=3");
+		Matcher<DomNode> test = hasAttributes(new String[] { "attr2", "2" },
+				new String[] { "attr1", "1" }, new String[] { "attr3", "3" });
 		assertThat(span, not(test));
 	}
 
@@ -66,14 +68,14 @@ public class HasAttributesTest {
 	public void mismatchIfAttributeValueNoMatch() throws IOException {
 		HtmlElement span = TestUtils
 				.createDomNode("<span attr1='1'>text</span>");
-		Matcher<DomNode> test = hasAttributes("attr1=one");
+		Matcher<DomNode> test = hasAttributes(new String[] { "attr1", "one" });
 		assertThat(test.matches(span), equalTo(false));
 	}
 
 	@Test
 	public void mismatchIfNoAttributes() throws IOException {
 		HtmlElement span = TestUtils.createDomNode("<span>text</span>");
-		Matcher<DomNode> test = hasAttributes("attr1=1");
+		Matcher<DomNode> test = hasAttributes(new String[] { "attr1", "1" });
 		assertThat(test.matches(span), equalTo(false));
 	}
 
