@@ -52,7 +52,7 @@ public class AsTextTest {
 		assertThat(TestUtils.createDomNode("<span>Should be no text</span>"),
 				not(asText("")));
 	}
-
+	
 	@Test
 	public void describe() {
 		TestUtils.assertDescribeTo(asText("I am text"),
@@ -66,5 +66,15 @@ public class AsTextTest {
 				.assertDescribeMismatch(asText("I am text"),
 						TestUtils.createDomNode("<span>Some text</span>"),
 						"did not match [Some text] on HtmlSpan[<span>Some text</span>]");
+	}
+	
+	@Test
+	public void matchingAgainstHtmlSelect() throws FailingHttpStatusCodeException,
+	MalformedURLException, IOException {
+		assertThat(
+				TestUtils
+						.createDomNode("<select><option>first</option><option>second</option></select>"),
+				asText("firstsecond"));
+
 	}
 }
