@@ -26,13 +26,13 @@ public class AsText extends DerivedMatchableMatcher<DomNode, DomNode> {
 	protected void describeMismatchSafely(DomNode item,
 			Description mismatchDescription) {
 		mismatchDescription.appendText(String.format(
-				"did not match [%s] on %s", item.asText(),
+				"did not match [%s] on %s", matchable(item).getTextContent(),
 				StringUtils.print(matchable(item))));
 	}
 
 	@Override
 	protected boolean matchesSafely(DomNode item) {
-		return this.text.equals(matchable(item).asText());
+		return this.text.equals(matchable(item).getTextContent());
 	}
 
 	@Factory
