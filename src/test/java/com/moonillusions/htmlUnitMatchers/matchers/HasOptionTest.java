@@ -10,6 +10,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlSelect;
 import com.moonillusions.htmlUnitMatchers.TestUtils;
 
 import static com.moonillusions.htmlUnitMatchers.matchers.HasOption.hasOption;
+import static com.moonillusions.htmlUnitMatchers.matchers.HasOption.hasOptions;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -93,6 +94,26 @@ public class HasOptionTest {
 		assertThat(select, not(hasOption("my text", "myValue", false, 0)));
 	}
 
+	@Test
+	public void matchMultiple() throws FailingHttpStatusCodeException,
+	MalformedURLException, IOException {
+		HtmlSelect select = (HtmlSelect) TestUtils.createDomNode("<select>"
+				+ "<option value=first>first</option>"
+				+ "<option value=second>second</option>"
+				+ "<option value=myValue2>myValue2</option>" + "</select>");
+		assertThat(select, hasOptions("first","second","myValue2"));
+	}
+	
+	@Test
+	public void mismatchMultiple() throws FailingHttpStatusCodeException,
+	MalformedURLException, IOException {
+		HtmlSelect select = (HtmlSelect) TestUtils.createDomNode("<select>"
+				+ "<option value=first>first</option>"
+				+ "<option value=second>third</option>"
+				+ "<option value=myValue3>myValue3</option>" + "</select>");
+		assertThat(select, not(hasOptions("first","second","myValue2")));
+	}
+	
 	//
 	//
 	// TODO: missing tests

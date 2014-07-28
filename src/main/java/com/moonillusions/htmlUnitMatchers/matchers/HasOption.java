@@ -1,12 +1,14 @@
 package com.moonillusions.htmlUnitMatchers.matchers;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Description;
 import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
 import org.hamcrest.core.AllOf;
+import static org.hamcrest.core.AllOf.allOf;
 
 import com.gargoylesoftware.htmlunit.html.DomNode;
 import com.gargoylesoftware.htmlunit.html.HtmlSelect;
@@ -69,6 +71,20 @@ public class HasOption extends AllOf<HtmlSelect> {
 	@Factory
 	public static HasOption hasOption(String text, String value, final int index) {
 		return hasOption(text, value, false, index);
+	}
+	
+	@Factory
+	public static HasOption hasOption(String value, final int index) {
+		return hasOption(value, value, false, index);
+	}
+	
+	@Factory
+	public static Matcher<HtmlSelect> hasOptions(String... values) {
+		HasOption[] all = new HasOption[values.length];
+		for(int i = 0; i < values.length; i++) {
+			all[i] = hasOption(values[i],i);
+		}
+		return allOf(all);
 	}
 
 }
