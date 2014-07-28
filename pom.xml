@@ -4,9 +4,29 @@
   <groupId>com.moonillusions.htmlUnitMatchers</groupId>
   <artifactId>htmlUnitMatchers</artifactId>
   <packaging>jar</packaging>
-  <version>1.0-SNAPSHOT</version>
-  <name>htmlUnitMatchers</name>
+  <version>0.1</version>
+  <name>htmlUnit matchers</name>
+  <description>Hamcrest matchers to be used with htmlUnit</description>
   <url>http://maven.apache.org</url>
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  <scm>
+    <connection>scm:git:https://github.com/ra1p3/htmlUnitMatchers.git</connection>
+    <tag>HEAD</tag>
+    <url>https://github.com/ra1p3/htmlUnitMatchers</url>
+  </scm>
+  <developers>
+    <developer>
+      <id>ra1pe</id>
+      <name>Ra1p3</name>
+      <email>raipe.spamfilter@gmail.com</email>
+    </developer>
+  </developers>
   <build>
   <plugins>
       <plugin>
