@@ -1,5 +1,10 @@
 package com.moonillusions.htmlUnitMatchers.matchers;
 
+import static com.moonillusions.htmlUnitMatchers.matchers.HasOption.hasOption;
+import static com.moonillusions.htmlUnitMatchers.matchers.HasOption.hasOptions;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.not;
+
 import java.io.IOException;
 import java.net.MalformedURLException;
 
@@ -8,11 +13,6 @@ import org.junit.Test;
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.html.HtmlSelect;
 import com.moonillusions.htmlUnitMatchers.TestUtils;
-
-import static com.moonillusions.htmlUnitMatchers.matchers.HasOption.hasOption;
-import static com.moonillusions.htmlUnitMatchers.matchers.HasOption.hasOptions;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 public class HasOptionTest {
 
@@ -96,25 +96,32 @@ public class HasOptionTest {
 
 	@Test
 	public void matchMultiple() throws FailingHttpStatusCodeException,
-	MalformedURLException, IOException {
+			MalformedURLException, IOException {
 		HtmlSelect select = (HtmlSelect) TestUtils.createDomNode("<select>"
 				+ "<option value=first>first</option>"
 				+ "<option value=second>second</option>"
 				+ "<option value=myValue2>myValue2</option>" + "</select>");
-		assertThat(select, hasOptions("first","second","myValue2"));
+		assertThat(select, hasOptions("first", "second", "myValue2"));
 	}
-	
+
 	@Test
 	public void mismatchMultiple() throws FailingHttpStatusCodeException,
-	MalformedURLException, IOException {
+			MalformedURLException, IOException {
 		HtmlSelect select = (HtmlSelect) TestUtils.createDomNode("<select>"
 				+ "<option value=first>first</option>"
 				+ "<option value=second>third</option>"
 				+ "<option value=myValue3>myValue3</option>" + "</select>");
-		assertThat(select, not(hasOptions("first","second","myValue2")));
+		assertThat(select, not(hasOptions("first", "second", "myValue2")));
 	}
-	
-	//
+
+	@Test
+	public void mismatch_null_description()
+			throws FailingHttpStatusCodeException, MalformedURLException,
+			IOException {
+		TestUtils.assertDescribeMismatch(hasOption("mytext", "myvalue", 0),
+				null, "given HtmlSelect element was null");
+	}
+
 	//
 	// TODO: missing tests
 	// hasCorrectMatchers

@@ -1,22 +1,21 @@
 package com.moonillusions.htmlUnitMatchers.matchers;
 
+import static com.moonillusions.htmlUnitMatchers.matchers.AsText.asText;
+import static com.moonillusions.htmlUnitMatchers.matchers.HasAttribute.hasAttribute;
+import static com.moonillusions.htmlUnitMatchers.matchers.NotNullElement.notNullElement;
+import static org.hamcrest.Matchers.not;
+
 import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Description;
 import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
 import org.hamcrest.core.AllOf;
-import static org.hamcrest.core.AllOf.allOf;
 
 import com.gargoylesoftware.htmlunit.html.DomNode;
 import com.gargoylesoftware.htmlunit.html.HtmlSelect;
 import com.moonillusions.htmlUnitMatchers.core.MatchableExtractor;
-
-import static com.moonillusions.htmlUnitMatchers.matchers.AsText.asText;
-import static com.moonillusions.htmlUnitMatchers.matchers.HasAttribute.hasAttribute;
-import static org.hamcrest.Matchers.not;
 
 public class HasOption extends AllOf<HtmlSelect> {
 
@@ -46,6 +45,7 @@ public class HasOption extends AllOf<HtmlSelect> {
 		};
 
 		ArrayList<Matcher<? super HtmlSelect>> matchers = new ArrayList<Matcher<? super HtmlSelect>>();
+		matchers.add(notNullElement("HtmlSelect"));
 
 		if (StringUtils.isNotEmpty(value)) {
 			Matcher<? super HtmlSelect> e1 = hasAttribute("value", value,
@@ -72,17 +72,17 @@ public class HasOption extends AllOf<HtmlSelect> {
 	public static HasOption hasOption(String text, String value, final int index) {
 		return hasOption(text, value, false, index);
 	}
-	
+
 	@Factory
 	public static HasOption hasOption(String value, final int index) {
 		return hasOption(value, value, false, index);
 	}
-	
+
 	@Factory
 	public static Matcher<HtmlSelect> hasOptions(String... values) {
 		HasOption[] all = new HasOption[values.length];
-		for(int i = 0; i < values.length; i++) {
-			all[i] = hasOption(values[i],i);
+		for (int i = 0; i < values.length; i++) {
+			all[i] = hasOption(values[i], i);
 		}
 		return allOf(all);
 	}

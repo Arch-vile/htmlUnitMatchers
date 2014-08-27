@@ -1,5 +1,10 @@
 package com.moonillusions.htmlUnitMatchers.matchers;
 
+import static com.moonillusions.htmlUnitMatchers.matchers.HasAttribute.hasAttribute;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.core.AllOf.allOf;
+
 import java.io.IOException;
 import java.net.MalformedURLException;
 
@@ -8,11 +13,6 @@ import org.junit.Test;
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.moonillusions.htmlUnitMatchers.TestUtils;
-
-import static com.moonillusions.htmlUnitMatchers.matchers.HasAttribute.hasAttribute;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.AllOf.allOf;
 
 public class HasAttributeTest {
 
