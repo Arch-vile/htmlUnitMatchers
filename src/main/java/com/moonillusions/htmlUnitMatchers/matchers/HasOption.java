@@ -19,72 +19,78 @@ import com.moonillusions.htmlUnitMatchers.core.MatchableExtractor;
 
 public class HasOption extends AllOf<HtmlSelect> {
 
-	private int index;
+    private int index;
 
-	public HasOption(int index, Iterable<Matcher<? super HtmlSelect>> arg0) {
-		super(arg0);
-		this.index = index;
-	}
+    public HasOption(int index, Iterable<Matcher<? super HtmlSelect>> arg0) {
+        super(arg0);
+        this.index = index;
+    }
 
-	@Override
-	public void describeTo(Description description) {
-		description.appendText(String.format("HtmlOption on index %s that: ",
-				this.index));
-		super.describeTo(description);
-	}
+    @Override
+    public void describeTo(Description description) {
+        description.appendText(String.format("HtmlOption on index %s that: ",
+                this.index));
+        super.describeTo(description);
+    }
 
-	@Factory
-	public static HasOption hasOption(String text, String value,
-			boolean isSelected, final int index) {
+    @Factory
+    public static HasOption hasOption(String text, String value,
+            boolean isSelected, final int index) {
 
-		MatchableExtractor<DomNode, DomNode> extractor = new MatchableExtractor<DomNode, DomNode>() {
-			@Override
-			public DomNode extract(DomNode from) {
-				return ((HtmlSelect) from).getOption(index);
-			}
-		};
+        MatchableExtractor<DomNode, DomNode> extractor = new MatchableExtractor<DomNode, DomNode>() {
+            @Override
+            public DomNode extract(DomNode from) {
+                return ((HtmlSelect) from).getOption(index);
+            }
+        };
 
-		ArrayList<Matcher<? super HtmlSelect>> matchers = new ArrayList<Matcher<? super HtmlSelect>>();
-		matchers.add(notNullElement("HtmlSelect"));
+        ArrayList<Matcher<? super HtmlSelect>> matchers = new ArrayList<Matcher<? super HtmlSelect>>();
+        matchers.add(notNullElement("HtmlSelect"));
 
-		if (StringUtils.isNotEmpty(value)) {
-			Matcher<? super HtmlSelect> e1 = hasAttribute("value", value,
-					extractor);
-			matchers.add(e1);
-		}
+        if (StringUtils.isNotEmpty(value)) {
+            Matcher<? super HtmlSelect> e1 = hasAttribute("value", value,
+                    extractor);
+            matchers.add(e1);
+        }
 
-		if (isSelected) {
-			Matcher<? super HtmlSelect> e1 = hasAttribute("selected",
-					"selected", extractor);
-			matchers.add(e1);
-		} else {
-			Matcher<? super HtmlSelect> e1 = hasAttribute("selected",
-					"selected", extractor);
-			matchers.add(not(e1));
-		}
+        if (isSelected) {
+            Matcher<? super HtmlSelect> e1 = hasAttribute("selected",
+                    "selected", extractor);
+            matchers.add(e1);
+        } else {
+            Matcher<? super HtmlSelect> e1 = hasAttribute("selected",
+                    "selected", extractor);
+            matchers.add(not(e1));
+        }
 
-		matchers.add(asText(text, extractor));
+        matchers.add(asText(text, extractor));
 
-		return new HasOption(index, matchers);
-	}
+        return new HasOption(index, matchers);
+    }
 
-	@Factory
-	public static HasOption hasOption(String text, String value, final int index) {
-		return hasOption(text, value, false, index);
-	}
+    @Factory
+    public static HasOption hasOption(String text, String value, final int index) {
+        return hasOption(text, value, false, index);
+    }
 
-	@Factory
-	public static HasOption hasOption(String value, final int index) {
-		return hasOption(value, value, false, index);
-	}
+    @Factory
+    public static HasOption hasOption(String text, Object value,
+            boolean isSelected, final int index) {
+        return hasOption(text, value.toString(), isSelected, index);
+    }
 
-	@Factory
-	public static Matcher<HtmlSelect> hasOptions(String... values) {
-		HasOption[] all = new HasOption[values.length];
-		for (int i = 0; i < values.length; i++) {
-			all[i] = hasOption(values[i], i);
-		}
-		return allOf(all);
-	}
+    @Factory
+    public static HasOption hasOption(String value, final int index) {
+        return hasOption(value, value, false, index);
+    }
+
+    @Factory
+    public static Matcher<HtmlSelect> hasOptions(String... values) {
+        HasOption[] all = new HasOption[values.length];
+        for (int i = 0; i < values.length; i++) {
+            all[i] = hasOption(values[i], i);
+        }
+        return allOf(all);
+    }
 
 }
